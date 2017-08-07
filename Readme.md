@@ -1,1 +1,1 @@
-Just for fum
+Just for fun
