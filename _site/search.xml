@@ -1,0 +1,1489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+    <entry>
+      <title><![CDATA[POJ 1113 Wall(简单凸包)]]></title>
+      <url>/2017/08/10/POJ1113/</url>
+      <content type="html"><![CDATA[<p><a href="http://poj.org/problem?id=1113">POJ 1113 Wall</a></p>
+
+<p>简单的凸包模版题</p>
+
+<!--more-->
+
+<h2 id="wall">Wall</h2>
+
+<p>Time Limit: 1000MS      Memory Limit: 10000K
+Total Submissions: 37869        Accepted: 12907</p>
+
+<h2 id="description">Description</h2>
+
+<p>Once upon a time there was a greedy King who ordered his chief Architect to build a wall around the King’s castle. The King was so greedy, that he would not listen to his Architect’s proposals to build a beautiful brick wall with a perfect shape and nice tall towers. Instead, he ordered to build the wall around the whole castle using the least amount of stone and labor, but demanded that the wall should not come closer to the castle than a certain distance. If the King finds that the Architect has used more resources to build the wall than it was absolutely necessary to satisfy those requirements, then the Architect will loose his head. Moreover, he demanded Architect to introduce at once a plan of the wall listing the exact amount of resources that are needed to build the wall.</p>
+
+<p>Your task is to help poor Architect to save his head, by writing a program that will find the minimum possible length of the wall that he could build around the castle to satisfy King’s requirements.</p>
+
+<p>The task is somewhat simplified by the fact, that the King’s castle has a polygonal shape and is situated on a flat ground. The Architect has already established a Cartesian coordinate system and has precisely measured the coordinates of all castle’s vertices in feet.
+Input</p>
+
+<p>The first line of the input file contains two integer numbers N and L separated by a space. N (3 &lt;= N &lt;= 1000) is the number of vertices in the King’s castle, and L (1 &lt;= L &lt;= 1000) is the minimal number of feet that King allows for the wall to come close to the castle.</p>
+
+<p>Next N lines describe coordinates of castle’s vertices in a clockwise order. Each line contains two integer numbers Xi and Yi separated by a space (-10000 &lt;= Xi, Yi &lt;= 10000) that represent the coordinates of ith vertex. All vertices are different and the sides of the castle do not intersect anywhere except for vertices.
+Output</p>
+
+<p>Write to the output file the single number that represents the minimal possible length of the wall in feet that could be built around the castle to satisfy King’s requirements. You must present the integer number of feet to the King, because the floating numbers are not invented yet. However, you must round the result in such a way, that it is accurate to 8 inches (1 foot is equal to 12 inches), since the King will not tolerate larger error in the estimates.</p>
+
+<p>Sample Input</p>
+
+<p>9 100
+200 400
+300 400
+300 300
+400 300
+400 400
+500 400
+500 200
+350 200
+200 200</p>
+
+<p>Sample Output</p>
+
+<p>1628</p>
+
+<p>Hint</p>
+
+<p>结果四舍五入就可以了</p>
+
+<p>Source</p>
+
+<p>Northeastern Europe 2001</p>
+
+<h3 id="简单的凸包模版题">简单的凸包模版题</h3>
+<p>题意: 输入凸包顶点数N和城墙与城堡之间距离L，接下来输入N个凸包顶点的坐标，求城墙周长</p>
+
+<p>分析: 城墙周长＝凸包周长＋一个以L为半径的圆的周长</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">1010</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">double</span> <span class="n">Pi</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="k">struct</span> <span class="n">Point</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span><span class="n">poi</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">stack</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">top</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">Cross</span><span class="p">(</span><span class="n">Point</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span><span class="c1">//求出向量 p0p1 和 p0p2的叉积
+</span><span class="p">{</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">dis</span><span class="p">(</span><span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span><span class="c1">//求p1, p2两点间距离
+</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">double</span><span class="p">)((</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">Cross</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="p">)))</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Init</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Point</span> <span class="n">p</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">||</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">poi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">poi</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Graham</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">top</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">Cross</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">top</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">top</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">l</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">Init</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">Graham</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">top</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]);</span>
+        <span class="p">}</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]]);</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Pi</span> <span class="o">*</span> <span class="n">l</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">ans</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>转载请注明：<a href="https://zyszys.github.io">ZYSzys的博客</a> » <a href="https://zyszys.github.io/2017/08/POJ1113/">POJ 1113 Wall(简单凸包)</a></p>
+]]></content>
+      <categories>
+        
+      </categories>
+      <tags>
+        
+          <tag> 计算几何 </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[Hello World 的编译链接概述]]></title>
+      <url>/2017/02/12/helloworld-compile-and-link/</url>
+      <content type="html"><![CDATA[<p>《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。</p>
+
+<!--more-->
+
+<p>有如下的<code class="highlighter-rouge">hello.c</code>源文件：</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>可以用 GCC 来编译运行：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> hello.c
+<span class="nv">$.</span>/a.out
+Hello World
+</code></pre>
+</div>
+
+<p>上述步骤可以分解为 4 个步骤，分别是<strong>预处理（Prepressing）</strong>、<strong>编译（Compilation）</strong>、<strong>汇编（Assembly）</strong>和<strong>链接（Linking）</strong>。</p>
+
+<h2 id="被隐藏了的过程">被隐藏了的过程</h2>
+
+<h3 id="预处理">预处理</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -E hello.c -o hello.i
+</code></pre>
+</div>
+
+<p>或者：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$cpp</span> hello.c &gt; hello.i
+</code></pre>
+</div>
+
+<p>预编译过程主要处理那些源代码文件听以“#”开始的预编译指令。</p>
+
+<p>经过预编译后的 .i 文件不包含任何宏定义，因为所有的宏已经被展开，并且包含的文件也已经被插入到 .i 文件中。</p>
+
+<h3 id="编译">编译</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -S hello.i -o hello.S
+</code></pre>
+</div>
+
+<p>或者使用<code class="highlighter-rouge">cc1</code>：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$/</span>usr/lib/gcc/i486-linux-gnu/4.1/cc1 hello.c
+</code></pre>
+</div>
+
+<p>编译过程就是把预处理完的文件进行一系列<strong>词法分析</strong>、<strong>语法分析</strong>、<strong>语义分析</strong>及<strong>优化</strong>后产生的相应的汇编代码文件。</p>
+
+<p>实际上 gcc 这个命令只是这些后台程序的包装，它会根据不同的参数要求去调用预编译编译程序 cc1、汇编器 as、链接器 ld。</p>
+
+<h3 id="汇编">汇编</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$as</span> hello.s -o hello.c
+</code></pre>
+</div>
+<p>或者：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -c hello.s -o hello.o
+</code></pre>
+</div>
+
+<p>汇编器是将汇编代码转变成机器可以执行的指令，每一个汇编语句几乎都对应一条机器指令。</p>
+
+<h3 id="链接">链接</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$ld</span> -static crt1.o crti.o crtbeginT.o hello.o -start-group -lgcc -lgcc_eh -lc -end-group crtend. crtn.o
+</code></pre>
+</div>
+
+<h2 id="编译器做了什么">编译器做了什么</h2>
+
+<p>编译过程一般可以分为6步：扫描、语法分析、语义分析、源代码优化、代码生成和目标代码优化。</p>
+
+<p>以如下代码为例：</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="词法分析">词法分析</h3>
+
+<p>源代码被输入到<strong>扫描器（Scanner）</strong>，进行词法分析，生成一系列的<strong>记号（Token）</strong>。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>记号</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>[</td>
+      <td>左方括号</td>
+    </tr>
+    <tr>
+      <td>index</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>]</td>
+      <td>右方括号</td>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td>赋值</td>
+    </tr>
+    <tr>
+      <td>(</td>
+      <td>左圆括号</td>
+    </tr>
+    <tr>
+      <td>index</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>加号</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>)</td>
+      <td>右圆括号</td>
+    </tr>
+    <tr>
+      <td>*</td>
+      <td>乘号</td>
+    </tr>
+    <tr>
+      <td>(</td>
+      <td>左圆括号</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>加号</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>)</td>
+      <td>右圆括号</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>在识别记号的同时，扫描器也将标识符存放到符号表，将数字、字符串常量存放到文字表等。</p>
+
+<p>有一个叫 lex 的程序可以实现词法分析，它会按照用户之前描述好的词法规则将输入的字符串分割成一个个记号。</p>
+
+<h3 id="语法分析">语法分析</h3>
+
+<p><strong>语法分析器（Grammar Parser）</strong>将上述产生的记号进行语法分析，从而生成<strong>语法树（Syntax Tree）</strong>。</p>
+
+<p>有一个现有的工具叫 yacc（Yet Another Compiler Compiler）可以构建出语法树。</p>
+
+<h3 id="语义分析">语义分析</h3>
+
+<p><strong>语义分析器（Semantic Analyzer）</strong>完成了对表达式的语法层面的分析，即<strong>静态语义（Static Semantic）</strong>，包括声明和类型匹配，类型的转换。</p>
+
+<p>语义分析阶段后，语法树的表达式都被标识了类型，如有隐式转换，则插入相应的转换节点。</p>
+
+<h3 id="中间语言的生成">中间语言的生成</h3>
+
+<p><strong>源码优化器（Source Code Optimizer）</strong>将整个语法树转换成<strong>中间代码（Intermediate Code）</strong>，常见的有<strong>三地址码（Three-address Code）</strong>和<strong>P-代码（P-Code）</strong>，再进行源码级别的优化。</p>
+
+<p>中间代码使用编译器可以被分为前端和后端。编译器前端负责产生机器无关的中间代码，编译器后端将中间代码转换成目标机器代码。</p>
+
+<h3 id="目标代码生成与优化">目标代码生成与优化</h3>
+
+<p><strong>代码生成（Code Generator）</strong>将中间代码转换成目标机器代码，<strong>目标代码化化器（Target Code Optimizer）</strong>则对目标代码进行优化。</p>
+
+<h2 id="静态链接">静态链接</h2>
+
+<p><strong>链接（Linking）</strong>的主要内容就是把各个模块之间相互引用的部分都处理好。</p>
+
+<p>链接过程主要包括了<strong>地址和空间分配（Address and Storage Allocation）</strong>、<strong>符号决议（Symbol Resolution）</strong>和<strong>重定位（Relocation）</strong>这些步骤。</p>
+
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+          <tag> compiler </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 函数重载与函数匹配]]></title>
+      <url>/2016/12/17/function-overload-and-match/</url>
+      <content type="html"><![CDATA[<p>《C++ Primer》笔记，整理关于函数重载与函数匹配的笔记。</p>
+
+<!--more-->
+
+<h2 id="函数重载">函数重载</h2>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//原函数
+</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//正确：形参类型不同
+</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 正确：形参个数不同
+</span><span class="kt">int</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//错误：只有返回类型不同
+</span>
+<span class="k">typedef</span> <span class="kt">int</span> <span class="n">int32</span><span class="p">;</span>
+<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">int32</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//与原函数等价：形参类型相同
+</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//与原函数等价：顶层 const 将被忽略
+</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span> <span class="c1">//与原函数等价：只是省略了形参名字
+</span></code></pre>
+</div>
+
+<p><strong>函数重载有如下的规则：</strong></p>
+
+<ul>
+  <li>名字相同，形参类型不一样。</li>
+  <li>不允许两个函数除了返回类型外其他所有的要素都相同。</li>
+  <li>顶层<code class="highlighter-rouge">const</code>的形参无法和没有顶层<code class="highlighter-rouge">const</code>的形参区分。</li>
+</ul>
+
+<p>其中返回类型不同时编译时会出错，而类型别名、项层<code class="highlighter-rouge">const</code>、省略形参名字只是重复声明而已，只要不定义，编译就不会出错，比如：</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//只定义了其中一个
+</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</code></pre>
+</div>
+
+<h2 id="函数匹配">函数匹配</h2>
+
+<h3 id="名字查找">名字查找</h3>
+
+<p>函数匹配的第一步便是<strong>名字查找（name lookup）</strong>，确定<strong>候选函数</strong>。</p>
+
+<p>名字查找有两方面：</p>
+
+<ul>
+  <li>常规查找（normal lookup）</li>
+  <li>实参决定的查找（argument-dependent lookup，ADL）</li>
+</ul>
+
+<p>所有函数调用都会进行常规查找，只有函数的实参包括类类型对象或指向类类型对象的指针/引用的时候，才会进行实参决定的查找。</p>
+
+<p><strong>常规查找</strong></p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span>	<span class="c1">//1
+</span><span class="k">namespace</span> <span class="n">N</span>
+<span class="p">{</span>
+	<span class="c1">//作用域
+</span>	<span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="p">{}</span>	<span class="c1">//2
+</span>	<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span>	<span class="c1">//3
+</span>	<span class="p">...</span>
+	<span class="kt">void</span> <span class="n">test1</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">func</span><span class="p">();</span> <span class="c1">//候选函数为函数2和3
+</span>	<span class="p">}</span>
+	
+	<span class="kt">void</span> <span class="n">test2</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="k">using</span> <span class="o">::</span><span class="n">func</span><span class="p">;</span> <span class="c1">//将函数1加入当前作用域
+</span>		<span class="n">func</span><span class="p">();</span> <span class="c1">//候选函数为函数1
+</span>	<span class="p">}</span>
+	<span class="p">...</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>从函数被调用的局部作用域开始，逐渐向上层寻找被调用的名字，一旦找到就停止向上寻找，将找到的所有名字加入候选函数。</p>
+
+<p>此外，using语句可以将其他作用域的名字引用到当前作用域。</p>
+
+<p><strong>ADL查找</strong></p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//1
+//第一个实参所在命名空间
+</span><span class="k">namespace</span> <span class="n">Name1</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">T</span> <span class="p">{</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//2
+</span>    <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//3
+</span><span class="p">}</span>
+<span class="c1">//第二个实参的间接父类所在命名空间
+</span><span class="k">namespace</span> <span class="n">Name00</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">T00</span> <span class="p">{</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//4
+</span>    <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//5
+</span><span class="p">}</span>
+<span class="c1">//第二个实参父类所在命名空间
+</span><span class="k">namespace</span> <span class="n">Name0</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">T0</span><span class="o">:</span><span class="k">public</span> <span class="n">Name00</span><span class="o">::</span><span class="n">T00</span> <span class="p">{</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//6
+</span>    <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//7
+</span><span class="p">}</span>
+<span class="c1">//第二个实参所在命名空间
+</span><span class="k">namespace</span> <span class="n">Name2</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">T</span><span class="o">:</span><span class="k">public</span> <span class="n">Name0</span><span class="o">::</span><span class="n">T0</span> <span class="p">{</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//8
+</span>    <span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//9
+</span><span class="p">}</span>
+<span class="kt">void</span> <span class="n">test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Name1</span><span class="o">::</span><span class="n">T</span> <span class="n">t1</span><span class="p">;</span>
+    <span class="n">Name2</span><span class="o">::</span><span class="n">T</span> <span class="n">t2</span><span class="p">;</span>
+    <span class="c1">//9个函数全是候选函数  
+</span>    <span class="c1">//第1个函数是normal lookup找到的
+</span>    <span class="c1">//后8个函数全是argument-dependent lookup找到的
+</span>    <span class="n">func</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>从第一个类类型参数开始，依次遍历所有类类型参数。对于每一个参数，进入其类型定义所在的作用域（类内友元函数也包括在内），并依次进入其基类、间接基类……定义所在的作用域，查找同名函数，并加入候选函数。</p>
+
+<p><strong>注意：</strong>在继承体系中上升的过程中，不会因为找到同名函数就停止上升，这不同于常规查找。</p>
+
+<p>类中的运算符重载也遵循 ADL 查找，其候选函数集既包括成员函数，也应该包括非成员函数。</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">N</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">A</span>
+	<span class="p">{</span>
+	<span class="k">public</span><span class="o">:</span>
+		<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//1
+</span>	<span class="p">};</span>
+	<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//2
+</span><span class="p">};</span>
+<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//3
+</span>
+<span class="kt">void</span> <span class="n">test</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">N</span><span class="o">::</span><span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+	<span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//1、2、3都是候选函数
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="确定可行函数">确定可行函数</h3>
+
+<p>第二步便是从候选函数中选出可行函数，选择的标准如下：</p>
+
+<ul>
+  <li>形参数量与本次调用提供的实参数量相等</li>
+  <li>每个实参的类型与对应的形参类型相同，或者能转换成形参类型</li>
+</ul>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//以下为候选函数
+</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数
+</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数：实参可转化成形参类型
+</span><span class="kt">int</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数
+</span>
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//非可行函数：形参数量不匹配
+</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">[])</span> <span class="p">{}</span> <span class="c1">//非可行函数：实参不能转换成形参
+</span>
+<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="寻找最佳匹配">寻找最佳匹配</h3>
+
+<p>从可行函数中选择最匹配的函数，如果有多个形参，则最佳匹配条件为：</p>
+
+<ul>
+  <li>该函数每个实参的匹配都不劣于其他可行函数需要的匹配。</li>
+  <li>至少有一个实参的匹配优于其他可行函数提供的匹配。</li>
+</ul>
+
+<p>否则，发生二义性调用错误。</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//可行函数
+</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
+<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
+
+<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span> <span class="c1">//二义性错误：double 向 int 的转换与向 float 的转换一样好
+</span>	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//调用 void func(int a, int b)
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>为了确定最佳匹配，实参类型到形参类型的转换等级如下：</p>
+
+<ol>
+  <li>精确匹配：
+    <ul>
+      <li>实参类型和形参类型相同。</li>
+      <li>实参从数组类型或函数类型转换成对应的指针类型。</li>
+      <li>向实参添加顶层<code class="highlighter-rouge">const</code>或者从实参中删除顶层<code class="highlighter-rouge">const</code>。</li>
+    </ul>
+  </li>
+  <li>通过<code class="highlighter-rouge">const</code>转换实现的匹配。</li>
+  <li>通过类型提升实现的匹配。</li>
+  <li>通过算术类型转换或指针转换实现的匹配。</li>
+  <li>通过类类型转换实现的匹配。</li>
+</ol>
+
+<p><em>一般不会存在这个阶段不会同时存在两个以上的精确匹配，因为两个精确的匹配在本质上是等价的，在定义重载函数时，编译器可能就报出重定义的错误了。</em></p>
+
+<p>挑几个重点的来详细说一下。</p>
+
+<p><strong>指针转换实现的匹配</strong></p>
+
+<ul>
+  <li>0 或<code class="highlighter-rouge">nullptr</code>能转换成任意指针类型。</li>
+  <li><code class="highlighter-rouge">T *</code> 能转换成 <code class="highlighter-rouge">void *</code>，<code class="highlighter-rouge">const void *</code>转换成<code class="highlighter-rouge">const void*</code>。</li>
+  <li>派生类向基类类型的转换。</li>
+  <li>函数与函数指针的形参类型必须精确匹配。</li>
+</ul>
+
+<p><strong>类类型转换实现的匹配</strong></p>
+
+<p>两个类型提供相同的类型转换将产生二义性问题。</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">B</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">A</span>
+<span class="p">{</span>
+	<span class="n">A</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="k">const</span> <span class="n">B</span><span class="o">&amp;</span><span class="p">);</span>	<span class="c1">//把一个 B 转换成 A
+</span><span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">B</span>
+<span class="p">{</span>
+	<span class="k">operator</span> <span class="n">A</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// 也是把一个 B 转换成 A
+</span><span class="p">};</span>
+
+<span class="n">A</span> <span class="n">f</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="n">B</span> <span class="n">b</span><span class="p">;</span>
+<span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="c1">//二义性错误：f(B::operator A()) 还是 f(A::A(const B&amp;))
+</span>
+<span class="n">A</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="k">operator</span> <span class="n">A</span><span class="p">());</span> <span class="c1">//正确：使用 B 的类型转换运算
+</span><span class="n">A</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">b</span><span class="p">));</span> <span class="c1">//正确：使用 A 的构造函数
+</span></code></pre>
+</div>
+
+<p>类当中定义了多个参数都是算术类型的构造函数或类型转换运算符，也会产生二义性问题。</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">A</span>
+<span class="p">{</span>
+	<span class="n">A</span><span class="p">(</span><span class="kt">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+	<span class="n">A</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
+	<span class="k">operator</span> <span class="kt">int</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+	<span class="k">operator</span> <span class="kt">double</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="n">f</span><span class="p">(</span><span class="kt">long</span> <span class="kt">double</span><span class="p">);</span>
+
+<span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">//二义性错误：f(A::operator int()) 还是 f(A::operator double())？
+</span>
+<span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
+<span class="n">A</span> <span class="n">a2</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="c1">//二义性错误：A::A(int) 还是 A::A(double)？
+</span>
+<span class="kt">short</span> <span class="n">s</span><span class="p">;</span>
+<span class="n">A</span> <span class="n">a3</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="c1">//正确：使用 A::A(int)
+</span></code></pre>
+</div>
+
+<p>当我们使用两个用户定义的类型转换时，如果转换函数之前或之后存在标准类型转换，则标准类型转换将决定最佳匹配到底是哪个。</p>
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 函数匹配及实参推断]]></title>
+      <url>/2016/11/21/function-matching-and-argument-deduction/</url>
+      <content type="html"><![CDATA[<p>记录一下函数重载、函数匹配、名字查找与实参类型推断的规则。</p>
+
+<!--more-->
+
+<h2 id="函数重载">函数重载</h2>
+
+<h3 id="函数重载规则">函数重载规则</h3>
+
+<ul>
+  <li>名字相同，形参类型不一样。</li>
+  <li>不允许两个函数除了返回类型外其他所有的要素都相同。</li>
+  <li>顶层<code class="highlighter-rouge">const</code>的形参无法和没有顶层<code class="highlighter-rouge">const</code>的形参区分。</li>
+</ul>
+
+<h3 id="重载与作用域">重载与作用域</h3>
+
+<ul>
+  <li>内层作用域中声明的名字，将隐藏外层作用域中声明的同名实体。</li>
+  <li>名字查找发生在类型检查之前。</li>
+</ul>
+
+<h2 id="名字查找">名字查找</h2>
+
+<ul>
+  <li>首先，在名字所在的块中寻找其声明语句，只考虑在名字使用之前出现的声明。</li>
+  <li>如果没有找到，继续查找外层作用域。</li>
+  <li>如果最终没有找到匹配的声明，则程序报错。</li>
+</ul>
+
+<p>对于类的定义：</p>
+
+<ul>
+  <li>首先，编译成员的声明。</li>
+  <li>直到类全部可见后才编译函数体。</li>
+</ul>
+
+<h2 id="函数匹配">函数匹配</h2>
+
+<h3 id="函数匹配步骤">函数匹配步骤</h3>
+
+<ul>
+  <li><strong>确定候选函数和可行函数</strong></li>
+</ul>
+
+<blockquote>
+  <p>选择函数名相同的、声明在调用点可见的函数作用候选函数。
+在候选函数中选出形参数量匹配并且类型可转换的函数作用可行函数。</p>
+</blockquote>
+
+<ul>
+  <li><strong>寻找最佳匹配</strong></li>
+</ul>
+
+<blockquote>
+  <p>从可行函数中选择最匹配的函数，如果有多个形参，则最佳匹配条件为：</p>
+
+  <ul>
+    <li>该函数每个实参的匹配都不劣于其他可行函数需要的匹配。</li>
+    <li>至少有一个实参的匹配优于其他可行函数提供的匹配。</li>
+  </ul>
+
+  <p>否则，发生二义性调用错误。</p>
+</blockquote>
+
+<h2 id="实参类型转换等级">实参类型转换等级</h2>
+
+<p>具体排序如下：</p>
+
+<ul>
+  <li>精确匹配：
+    <ul>
+      <li>实参类型和形参类型相同。</li>
+      <li>实参从数组类型或函数类型转换成对应的指针类型。</li>
+      <li>向实参添加顶层<code class="highlighter-rouge">const</code>或者从实参中删除顶层<code class="highlighter-rouge">const</code>。</li>
+    </ul>
+  </li>
+  <li>通过<code class="highlighter-rouge">const</code>转换实现的匹配。</li>
+  <li>通过类型提升实现的匹配。</li>
+  <li>通过算术类型转换或指针转换实现的匹配。</li>
+</ul>
+
+<h2 id="函数指针">函数指针</h2>
+
+<p>函数与函数指针的形参类型必须精确匹配。</p>
+
+<h2 id="类类型转换运算符匹配">类类型转换运算符匹配</h2>
+
+<p><strong>如果类类型和目标类型之间存在多种转换的方式，则可能发生二义性错误：</strong></p>
+
+<ul>
+  <li>两个类型提供相同的类型转换。</li>
+  <li>类定义了多个转换的规则。</li>
+</ul>
+
+<p>当我们使用两个用户定义的类型转换时，如果转换函数之前或之后存在标准类型转换，则标准类型转换将决定最佳匹配到底是哪个。</p>
+
+<h2 id="重载函数与转换构造函数">重载函数与转换构造函数</h2>
+
+<p>如果两个或多个类型转换都提供了同一种可行的匹配，则这些类型转换一样好。</p>
+
+<p>在调用重载函数时，如果需要额外的标准类型转换，则该转换的级别只有当所有可行函数请求同一个用户定义的类型转换时才有用。如果所需的用户定义的类型转换不止一个，则该调用具有二义性。</p>
+
+<h2 id="函数匹配与重载运算符">函数匹配与重载运算符</h2>
+
+<p>表达式中运算符的候选函数集既包括成员函数，也应该包括非成员函数。</p>
+
+<h2 id="模板实参推断">模板实参推断</h2>
+
+<h3 id="类型转换与模板类型参数">类型转换与模板类型参数</h3>
+
+<p>能应用于函数模板的类型转换：</p>
+
+<ul>
+  <li>顶层 const 会被忽略。</li>
+  <li>const 转换：非 const 对象的引用（或指针）传递给一个 const 的引用（或指针）的形参。</li>
+  <li>数组或函数指针的转换。</li>
+</ul>
+
+<p>一个模板类型参数可以用作多个函数形参的类型。由于只允许有限的几种类型转换，因此传递给这些形参的实参必须具有相同的类型。</p>
+
+<p>正常类型转换应用于显示指定的实参。</p>
+
+<h3 id="函数指针和实参推断">函数指针和实参推断</h3>
+
+<p>当参数是一个函数模板实例的地址时，程序上下文必须満足：对每个模板参数，能唯一确定其类型或值。</p>
+
+<h3 id="重载与模板">重载与模板</h3>
+
+<ul>
+  <li>对于一个调用，其候选函数包括所有模板实参推断成功的函数模板实例。</li>
+  <li>候选的函数模板总是可行的，因为模板实参推断会排除任何不可行的模板。</li>
+  <li>可行函数按类型转换来排序，如果有一个函数比其他函数匹配更好，则选择此函数。</li>
+  <li>如果有多个函数提供同样好的匹配则：
+    <ul>
+      <li>如果同样好的函数中 且个是非模板函数，则选择此函数。</li>
+      <li>如果没有非模板函数，如果其中一个模板函数更特例化，则选择此模板。</li>
+      <li>否则，此调用有歧义。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="异常类型与-catch-类型的匹配">异常类型与 catch 类型的匹配</h2>
+
+<p>异常类型与<code class="highlighter-rouge">catch</code>类型必须精确匹配：</p>
+
+<ul>
+  <li>允许从非常量向常量转换。</li>
+  <li>允许从派生类向基类转换。</li>
+  <li>数组与函数转换成指针。</li>
+</ul>
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 字面值常量]]></title>
+      <url>/2016/11/14/cpp-literal/</url>
+      <content type="html"><![CDATA[<p>在类型转换和函数匹配中，字面值类型也是非常值得关注的。</p>
+
+<!--more-->
+
+<h2 id="整型和浮点型字面值">整型和浮点型字面值</h2>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="mi">20</span> <span class="cm">/* 十进制 */</span>	<span class="mo">024</span> <span class="cm">/* 八进制 */</span>	<span class="mh">0x14</span> <span class="cm">/* 十六进制 */</span>
+</code></pre>
+</div>
+
+<p>默认情况下，十进制字面值是带符号数，八进制和十六进制既可能是带符号的也可能是无符号的。</p>
+
+<p>十进制字面值类型是<code class="highlighter-rouge">int</code>、<code class="highlighter-rouge">long</code>和<code class="highlighter-rouge">long long</code>中尺寸最小的。</p>
+
+<p>八进制和十六进制字面值类型是<code class="highlighter-rouge">int</code>、<code class="highlighter-rouge">unsigned int</code>、<code class="highlighter-rouge">long</code>、<code class="highlighter-rouge">unsigned long</code>、<code class="highlighter-rouge">long long</code>和<code class="highlighter-rouge">unsigned long long</code>中的尺寸最小者。</p>
+
+<p>严格来说，十进制字面值不会是负数，负数只是对字面值取负值而已。</p>
+
+<p>默认的，浮点型字面值是一个<code class="highlighter-rouge">double</code>。</p>
+
+<h2 id="转义序列">转义序列</h2>
+
+<p><code class="highlighter-rouge">\x</code>后紧跟1个或多个十六进制数字，或<code class="highlighter-rouge">\</code>后紧跟1个、2个或3个八进制数字。</p>
+
+<h2 id="指定字面值的类型">指定字面值的类型</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>前缀</th>
+      <th>含义</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>u</td>
+      <td>Unicode 16 字符</td>
+      <td>char16_t</td>
+    </tr>
+    <tr>
+      <td>U</td>
+      <td>Unicode 32 字符</td>
+      <td>char32_t</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>宽字符</td>
+      <td>wchar_t</td>
+    </tr>
+    <tr>
+      <td>u8</td>
+      <td>UTF-8（仅用于字符串字面常量）</td>
+      <td>char</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>后缀</th>
+      <th>最小匹配类型</th>
+      <th>后缀</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>u or U</td>
+      <td>unsigned</td>
+      <td>f 或 F</td>
+      <td>float</td>
+    </tr>
+    <tr>
+      <td>l or L</td>
+      <td>long</td>
+      <td>l 或 L</td>
+      <td>long double</td>
+    </tr>
+    <tr>
+      <td>ll or LL</td>
+      <td>long long</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 类型转换]]></title>
+      <url>/2016/11/13/cpp-type-conversion/</url>
+      <content type="html"><![CDATA[<p>C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。</p>
+
+<!--more-->
+
+<h2 id="隐式转换">隐式转换</h2>
+
+<h3 id="何时发生隐式转换">何时发生隐式转换</h3>
+
+<ul>
+  <li>在大多数表达式中，比<code class="highlighter-rouge">int</code>类型小的整型值首先提升为较大的整数类型（整型提升）。</li>
+  <li>在条件中，非布尔值转换成布尔类型。</li>
+  <li>初始化过程中，初始化值转换成变量类型；在赋值语句中，右侧运算对象转换成左侧运算对象的类型。</li>
+  <li>如果算术运算或关系运算的运算有多种类型，需要转换成一种类型（算术转换）。</li>
+  <li>函数调用时也会发生类型转换。</li>
+</ul>
+
+<h3 id="转换规则">转换规则</h3>
+
+<p><strong>算术转换</strong></p>
+
+<p>运算符的对象转换成最宽的对象。当表达式中既有浮点型也有整型类型时，整型值也转换成浮点型。</p>
+
+<p><strong>整型提升</strong></p>
+
+<p>小整数类型转换成较大的整数类型，对于<code class="highlighter-rouge">bool</code>、<code class="highlighter-rouge">char</code>、<code class="highlighter-rouge">signed char</code>、<code class="highlighter-rouge">unsigned char</code>、<code class="highlighter-rouge">short</code>和<code class="highlighter-rouge">unsigned short</code>，只要它们所有可能的值都能存在<code class="highlighter-rouge">int</code>里，它们就会提升成<code class="highlighter-rouge">int</code>类型，否则提升成<code class="highlighter-rouge">unsigned int</code>类型。</p>
+
+<p>较大的<code class="highlighter-rouge">char</code>类型（<code class="highlighter-rouge">wchar_t</code>、<code class="highlighter-rouge">char16_t</code>、<code class="highlighter-rouge">char32_t</code>）提升成<code class="highlighter-rouge">int</code>、<code class="highlighter-rouge">unsigned int</code>、<code class="highlighter-rouge">long</code>、<code class="highlighter-rouge">unsigned long</code>、<code class="highlighter-rouge">long long</code>和<code class="highlighter-rouge">unsigned long long</code>中最小的一种类型。</p>
+
+<p><strong>无符号类型的运算对象</strong></p>
+
+<p>首先进行整型提升，提升后如果符号相同则小类型转换大类型。如果符号不同，而其中无符号类型不小于带符号类型，则都转成无符号的；如果带符号类型大于无符号类型，如果无符号类型的所有值都能存在带符号类型中，则无符号转成带符号，如果不能，那么带符号转换无符号。</p>
+
+<p><strong>派生类到基类转换</strong></p>
+
+<ul>
+  <li>派生类型向基类类型转换只对指针或引用有效。</li>
+  <li>基类向派生类不存在隐式类型转换。</li>
+  <li>转换可能访问受限：
+    <ul>
+      <li>只有公有继承时，用户代码才能使用该转换。</li>
+      <li>任意方式继承，成员函数和友元都能使用该转换。</li>
+      <li>D 公有继承或保存继承 B 时，则 D 的派生类的成员或友元才能使用 B 向 D 的转换。</li>
+    </ul>
+  </li>
+  <li>能够将一个派生类对象拷贝、移动或赋值给一个基类对象，不过只处理派生类对象的基类部分。</li>
+</ul>
+
+<p><strong>隐式的类类型转换（转换构造函数）</strong></p>
+
+<p>能通过一个实参调用的构造函数定义了一条从构造函数的类型向类类型的隐式转换规则，只允许一步类类型转换（内置类型转换除外）。</p>
+
+<p>可以使用<code class="highlighter-rouge">explicit</code>抑制构造函数定义的隐式转换。</p>
+
+<p><strong>其它隐式类型转换</strong></p>
+
+<ul>
+  <li>数组自动转换成指针。</li>
+  <li>指针的转换：<code class="highlighter-rouge">nullptr</code>能转换成任意指针类型；指向任意非常量的指针能转换成<code class="highlighter-rouge">void*</code>；指向任意对象的指针能转换成<code class="highlighter-rouge">const void *</code>；继承关系指针的转换。</li>
+  <li>转换成布尔类型：如果指针或算术类型的值为0，转换结果为<code class="highlighter-rouge">false</code>；否则转换结果是<code class="highlighter-rouge">true</code>。</li>
+  <li>转换成常量：指向 T 的指针或引用分别转换成指向<code class="highlighter-rouge">const T</code>的指针或引用（顶层<code class="highlighter-rouge">const</code>）。</li>
+  <li>类类型定义的转换。</li>
+</ul>
+
+<h2 id="显式转换">显式转换</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">static_cast</code>：只要不包含底层<code class="highlighter-rouge">const</code>，都可以使用<code class="highlighter-rouge">static_cast</code>。</li>
+  <li><code class="highlighter-rouge">const_cast</code>：只能改变运算对象的底层<code class="highlighter-rouge">const</code>，如果对象本身是一个常量，那么行为未定义。</li>
+  <li><code class="highlighter-rouge">reinterpret_cast</code>：为运算对象的位模式提供较底层次上的重新解释。</li>
+  <li>旧式强制类型转换：
+    <div class="highlighter-rouge"><pre class="highlight"><code>  type (expr);
+  (type) expr;
+</code></pre>
+    </div>
+  </li>
+</ul>
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++对象模型之复制构造函数]]></title>
+      <url>/2015/09/22/cpp-object-model-copy-constructor/</url>
+      <content type="html"><![CDATA[<p><em>“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个”</em> 这句话是不对的，当 class 展现 <strong>bitwise copy semanics</strong> 时，编译器才会产生出来。</p>
+
+<!--more-->
+
+<p>如果一个 class 没有提供 explicit copy constructor，把每一个内建的或派生的 data member 的值，从某个 object 拷贝一份到另一个 object 身上，递归方式施行 <strong>memberwise initialization</strong>。</p>
+
+<p>例如：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">String</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="c1">// ... 没有 explicit copy constructor
+</span>    <span class="nl">private:</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>有如下调用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">noun</span><span class="p">(</span><span class="s">"book"</span><span class="p">);</span>
+<span class="n">String</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">noun</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>则会施行 memberwise initialization：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">verb</span><span class="p">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">noun</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="n">verb</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">noun</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+</code></pre>
+</div>
+<p>如果一个 String object 被声明为另一个 class 的 member，那么进行 memberwise initialization 时，会递归实施。</p>
+
+<p>什么时候不展现出 bitwise copy semantics，也就是合成 copy constructor 呢，有4种情况：</p>
+
+<blockquote>
+  <ol>
+    <li>当 member object 存在 copy constructor。</li>
+    <li>当 base class 存在 copy constructor。</li>
+    <li>当 class 声明了 virtual functions 时。</li>
+    <li>当继承链中有 virtual base class 时。</li>
+  </ol>
+</blockquote>
+
+<p>前面两种情况，在此不做讨论。</p>
+
+<h2 id="class-声明了-virtual-functions">class 声明了 virtual functions</h2>
+
+<p>这种情况下，可能需要重新设定 Virtual Table 的指针。</p>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">ZooAnimal</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">ZooAnimal</span><span class="p">();</span>
+    
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">animate</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">draw</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Bear</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Bear</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">animate</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">draw</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dance</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<p>有如下使用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Bear</span> <span class="n">yogi</span><span class="p">;</span>
+<span class="n">Bear</span> <span class="n">winnie</span> <span class="o">=</span> <span class="n">yogi</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">winnie</code>会靠 bitwise copy semantics 完成，<code class="highlighter-rouge">winnie</code>和<code class="highlighter-rouge">yogi</code>都指向<code class="highlighter-rouge">Bear class</code>的 virual table。</p>
+
+<p>如果是如下使用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ZooAnimal</span> <span class="n">franny</span> <span class="o">=</span> <span class="n">yogi</span><span class="p">;</span> <span class="c1">// 会发生切割行为
+</span></code></pre>
+</div>
+
+<p><code class="highlighter-rouge">franny</code>的 vptr 不可以被设定指向<code class="highlighter-rouge">Bear class</code>的 virtual table，所以需要重新设定。</p>
+
+<h2 id="virtual-base-class-的-subobject">Virtual Base Class 的 Subobject</h2>
+
+<p>derived class object 的 virtual base class subobject 位置必须维护，bitwise copy semantics 可能会存坏这个位置。</p>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Raccon</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Raccoon</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">Raccoon</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">RedPanda</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Raccoon</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">RedPanda</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">RedPanda</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<p>如果是以下调用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Raccoon</span> <span class="n">rocky</span><span class="p">;</span>
+<span class="n">Raccoon</span> <span class="n">little_critter</span> <span class="o">=</span> <span class="n">rocky</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>那么 bitwise copy 就可以了。</p>
+
+<p>如果是：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">RedPanda</span> <span class="n">little_red</span><span class="p">;</span>
+<span class="n">Raccoon</span> <span class="n">little_critter</span> <span class="o">=</span> <span class="n">litter_red</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>这时候编译器必须安插代码以设定 virtual base class offset 的初值。</p>
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 对象模型之构造函数]]></title>
+      <url>/2015/09/21/cpp-object-model-constructor/</url>
+      <content type="html"><![CDATA[<p>看看以下这段代码：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="kt">int</span> <span class="n">val</span><span class="p">;</span> <span class="n">Foo</span> <span class="o">*</span><span class="n">pnext</span><span class="p">;</span> <span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">foo_bar</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Foo</span> <span class="n">bar</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">bar</span><span class="p">.</span><span class="n">val</span> <span class="o">||</span> <span class="n">bar</span><span class="p">.</span><span class="n">pnext</span> <span class="p">)</span>
+        <span class="c1">// ... do somthing
+</span>    <span class="c1">// ...
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>上述程序并不会合成出一个 default constructor。什么时候会合成出 default constructor 呢，下面分4种情况。</p>
+
+<!--more-->
+
+<h2 id="带有-default-constructor-的-memeber-class-object">带有 Default Constructor 的 Memeber Class Object</h2>
+
+<p>编译器需要为该 class 合成一个 default constructor，不过这个合成操作只有在 constructor 真正需要被调用时才会发生。</p>
+
+<p>合成的 default constructor、copy constructor、destructor、assignment copy operator 都以<code class="highlighter-rouge">inline</code>方式完成，如果函数太复杂，不适合做成<code class="highlighter-rouge">inline</code>，就会合成出 explicit non-inline static 实例。</p>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Foo</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="n">Foo</span><span class="p">();</span> <span class="n">Foot</span><span class="p">(</span><span class="kt">int</span> <span class="p">)</span> <span class="p">...</span> <span class="p">};</span>
+<span class="k">class</span> <span class="nc">Bar</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="n">Foo</span> <span class="n">foo</span><span class="p">;</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">;</span> <span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">foo_bar</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Bar</span> <span class="n">bar</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><img src="http://simpleyyt.qiniudn.com/15-9-22/65375122.jpg" alt="对象关系" /></p>
+
+<p>编译器会为<code class="highlighter-rouge">class Bar</code>合成一个 default constructor 来处理 <code class="highlighter-rouge">Bar::foo</code>，但它并不初始化<code class="highlighter-rouge">Bar::str</code>。</p>
+
+<p>合成的 default constructor 可能像这样：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kr">inline</span>
+<span class="n">Bar</span><span class="o">::</span><span class="n">Bar</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">foo</span><span class="p">.</span><span class="n">Foo</span><span class="o">::</span><span class="n">Foo</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>假设程序员提供了 default constructor：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Bar</span><span class="o">::</span><span class="n">Bar</span><span class="p">()</span> <span class="p">{</span> <span class="n">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>则编译器会扩张已存在的 constructors：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Bar</span><span class="o">::</span><span class="n">Bar</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">foo</span><span class="p">.</span><span class="n">Foo</span><span class="o">::</span><span class="n">Foo</span><span class="p">();</span>
+    <span class="n">str</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>如果有多个 class member objects 都要求 constructor 初始化操作，C++ 语言将以 <strong>member objects 在 class 中的声明顺序</strong>来调用各个 constructors。</p>
+
+<h2 id="带有-default-constructor-的-base-class">带有 Default Constructor 的 Base Class</h2>
+
+<p>将会合成 Default Constructor，会根据 base class 声明的顺序调用 base class 的 default constructor。</p>
+
+<p>如果有多个 constructors，编译器会扩张现有的每一个 constructors。</p>
+
+<h2 id="带有一个-virtual-function-的-class">带有一个 Virtual Function 的 Class</h2>
+
+<p>以下两种情况，也需要合成出 default constructor：</p>
+
+<blockquote>
+  <ol>
+    <li>class 声明（或继承）一个 virtual function。</li>
+    <li>class 派生自一个继承串链，其中有一个或更多的 virtual base classes。</li>
+  </ol>
+</blockquote>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Widget</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">flip</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">// ...
+</span><span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">flip</span><span class="p">(</span> <span class="k">const</span> <span class="n">Widget</span><span class="o">&amp;</span> <span class="n">widget</span> <span class="p">)</span> <span class="p">{</span> <span class="n">widget</span><span class="p">.</span><span class="n">flip</span><span class="p">();</span> <span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Bell</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">Whistle</span> <span class="n">w</span><span class="p">;</span>
+    
+    <span class="n">flip</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">flip</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><img src="http://simpleyyt.qiniudn.com/15-9-22/58211208.jpg" alt="类图" /></p>
+
+<p>编译期间发生两个扩张：</p>
+
+<blockquote>
+  <ol>
+    <li>virtual function table</li>
+    <li>pointer member （也就是 vptr ）</li>
+  </ol>
+</blockquote>
+
+<p><code class="highlighter-rouge">flip</code> 函数可能被改写如下：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="p">(</span> <span class="o">*</span><span class="n">widget</span><span class="p">.</span><span class="n">vptr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)(</span> <span class="o">&amp;</span><span class="n">widget</span> <span class="p">)</span>
+</code></pre>
+</div>
+
+<p>为了让这个机制发挥功效，编译器必须为每一个 Widget（或其派生类）object 的 vptr 设置初值，放置适当的 virtual table 地址。对于 class 所定义的每一个 constructor，编译器会安插一些代码来做这样的事情，如果没有 construcotr，则合成一个。</p>
+
+<h2 id="带有一个-virtual-base-class-的-class">带有一个 Virtual Base Class 的 Class</h2>
+
+<p>例如以下代码：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">X</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="p">};</span>
+<span class="k">class</span> <span class="nc">A</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">X</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="kt">int</span> <span class="n">j</span><span class="p">;</span> <span class="p">};</span>
+<span class="k">class</span> <span class="nc">B</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">X</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="kt">double</span> <span class="n">d</span><span class="p">;</span> <span class="p">};</span>
+<span class="k">class</span> <span class="nc">C</span> <span class="o">:</span> <span class="k">public</span> <span class="n">A</span><span class="p">,</span> <span class="k">public</span> <span class="n">B</span> <span class="p">{</span> <span class="k">public</span><span class="o">:</span> <span class="kt">int</span> <span class="n">k</span><span class="p">;</span> <span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span><span class="o">*</span> <span class="n">pa</span><span class="p">)</span> <span class="p">{</span> <span class="n">pa</span><span class="o">-&gt;</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">foo</span><span class="p">(</span><span class="k">new</span> <span class="n">A</span><span class="p">);</span>
+    <span class="n">foo</span><span class="p">(</span><span class="k">new</span> <span class="n">C</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">foo()</code>可能被改写如下：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span><span class="o">*</span> <span class="n">pa</span><span class="p">)</span> <span class="p">{</span> <span class="n">pa</span><span class="o">-&gt;</span><span class="n">_vbcX</span><span class="o">-&gt;</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>class 所定义的每一个 constructor，编译器会安插代码来初始化<code class="highlighter-rouge">_vbcX</code>，如果没有 constructors，编译器必须合成一个 default constructor。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>C++ 新手一般有两个常见的误解：</p>
+
+<blockquote>
+  <ol>
+    <li>任何 class 如果没有定义 default constructor，就会被合成出一个来。</li>
+    <li>编译器合成出来的 default constructor 会显式设定 class 内每一个 data member 的默认值。</li>
+  </ol>
+</blockquote>
+
+<p>如你所见，没有一个是真的。</p>
+
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[C++ 之迭代器与算法]]></title>
+      <url>/2015/09/21/cpp-iterator-and-algorithm/</url>
+      <content type="html"><![CDATA[<p>C++ 有插入迭代器、流迭代器、反向迭代器、移动迭代器，泛型算法结构有适用的迭代器类别：输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器。</p>
+
+<!--more-->
+
+<h2 id="再探迭代器">再探迭代器</h2>
+
+<p><strong>迭代器</strong>:</p>
+
+<ul>
+  <li>插入迭代器</li>
+  <li>流迭代器</li>
+  <li>反向迭代器</li>
+  <li>移动迭代器</li>
+</ul>
+
+<h3 id="插入迭代器">插入迭代器</h3>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">it</span> <span class="o">=</span> <span class="n">t</span> <span class="c1">//在it指定的当前位置插入值t。
+</span><span class="o">*</span><span class="n">it</span><span class="err">，</span><span class="o">++</span><span class="n">it</span><span class="p">,</span><span class="n">it</span><span class="o">++</span> <span class="c1">//不会做任何事情，都返回it
+</span></code></pre>
+</div>
+<ul>
+  <li><strong><code class="highlighter-rouge">back_inserter</code></strong>: <code class="highlighter-rouge">push_back</code>的迭代器</li>
+  <li><strong><code class="highlighter-rouge">front_inserter</code></strong>: <code class="highlighter-rouge">push_front</code>的迭代器</li>
+  <li><strong><code class="highlighter-rouge">inserter</code></strong>: 第二个参数指向给定容器的迭代器</li>
+</ul>
+
+<h3 id="流迭代器">流迭代器</h3>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">in</span><span class="p">(</span><span class="n">is</span><span class="p">);</span> <span class="c1">//in从输入流is读取类型为T的值
+</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">end</span><span class="p">;</span>    <span class="c1">//读取类型为T的值istream_iterator迭代器，表示尾后位置
+</span><span class="n">in1</span> <span class="o">==</span> <span class="n">in2</span>  <span class="c1">//in1和in2必须读取相同类型
+</span><span class="n">in1</span> <span class="o">!=</span> <span class="n">in2</span>
+<span class="o">*</span><span class="n">in</span> <span class="c1">//返回从流中读取的值
+</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">mem</span>
+<span class="o">++</span><span class="n">in</span><span class="p">,</span> <span class="n">in</span><span class="o">++</span>
+</code></pre>
+</div>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ostream_itertor</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">out</span><span class="p">(</span><span class="n">os</span><span class="p">);</span>
+<span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">out</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span> 
+<span class="n">out</span> <span class="o">=</span> <span class="n">val</span>
+<span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="o">++</span><span class="n">out</span><span class="p">,</span> <span class="n">out</span><span class="o">++</span> <span class="c1">//不做任何事
+</span></code></pre>
+</div>
+
+<p>可以为任何定义了输入运算符(»)的类型创建<code class="highlighter-rouge">istream_iterator</code>对象，类似的(«)可以创建<code class="highlighter-rouge">ostream_iterator</code>对象。</p>
+
+<h3 id="反向迭代器">反向迭代器</h3>
+
+<blockquote>
+  <p><code class="highlighter-rouge">rbegin</code>、<code class="highlighter-rouge">rend</code>、<code class="highlighter-rouge">crbegin</code>、<code class="highlighter-rouge">crend</code></p>
+</blockquote>
+
+<p><strong>反向迭代器需要递减运算符</strong></p>
+
+<p>不可能从一个<code class="highlighter-rouge">forward_list</code>或一个流迭代器创建反向迭代器。</p>
+
+<h2 id="泛型算法结构">泛型算法结构</h2>
+
+<p><strong>迭代器类别</strong>:</p>
+
+<ul>
+  <li><strong>输入迭代器</strong>：<code class="highlighter-rouge">==</code> <code class="highlighter-rouge">！=</code> <code class="highlighter-rouge">++</code> <code class="highlighter-rouge">*</code> <code class="highlighter-rouge">-&gt;</code> 不保迭代器状态。</li>
+  <li><strong>输出迭代器</strong>：<code class="highlighter-rouge">++</code> <code class="highlighter-rouge">*</code> 只能赋值一次。</li>
+  <li><strong>前向迭代器</strong>：输入和输出迭代器的操作，多次读写，多遍扫描。</li>
+  <li><strong>双向迭代器</strong>：前置和后置递减运算符(<code class="highlighter-rouge">--</code>)。</li>
+  <li><strong>随机访问迭代器</strong>：常量时间访问序列，(<code class="highlighter-rouge">&lt;</code> <code class="highlighter-rouge">&lt;=</code> <code class="highlighter-rouge">&gt;</code> <code class="highlighter-rouge">&gt;=</code> <code class="highlighter-rouge">+</code> <code class="highlighter-rouge">+=</code> <code class="highlighter-rouge">-</code> <code class="highlighter-rouge">-=</code> <code class="highlighter-rouge">-</code> <code class="highlighter-rouge">[]</code>）。</li>
+</ul>
+
+<h3 id="算法形参模式">算法形参模式</h3>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">alg</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+<span class="n">alg</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+<span class="n">alg</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">beg2</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+<span class="n">alg</span><span class="p">(</span><span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">beg2</span><span class="p">,</span> <span class="n">end2</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>一些算法使用重载形式传递一个谓词</li>
+  <li>_if版本算法</li>
+  <li>区分拷贝元素的版本和不拷贝的版本</li>
+</ul>
+
+<h3 id="特定容器算法">特定容器算法</h3>
+
+<p>链表类型<code class="highlighter-rouge">list</code>和<code class="highlighter-rouge">forward_list</code>定义了几个成员函数形式的算法：<code class="highlighter-rouge">sort</code> <code class="highlighter-rouge">merge</code> <code class="highlighter-rouge">remove</code> <code class="highlighter-rouge">reverse</code> <code class="highlighter-rouge">unique</code>。</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">lst</span><span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">lst2</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">lst2</span><span class="p">,</span><span class="n">comp</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">remove_if</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><strong>splice成员</strong>:</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">lst</span><span class="p">.</span><span class="n">splice</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">splice_after</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</code></pre>
+</div>
+]]></content>
+      <categories>
+        
+          <category> Program </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> cpp </tag>
+        
+          <tag> c </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+</search>
