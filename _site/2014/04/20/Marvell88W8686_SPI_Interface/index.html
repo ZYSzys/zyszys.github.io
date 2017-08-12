@@ -1,0 +1,1471 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="hxyd6b4vb-uzYY6dVuzz4KXhScoVoEUjtiRWYSJVlrY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="embedded,88w8686,wifi," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Simpleyyt" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/author.jpeg?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="88w8686 是一款低成本、低功耗，支持IEEE 802.11a/g/b MAC/基带/射频(RF)无线局域网标准的片上系统,设计支持IEEE 802.11a/g标准的6、 9、12、18、24、36、48、54M 有效数据速率，和IEEE 802.11 b 标准的1、2、5.5、11 M 数据速率。88w8686 提供IEEE802.11/802.11 b 标准直接序列扩散光谱(DSSS),802.11a/ g 正交频分复用(OFDM)基带调制,媒体访问控制(MAC),CPU,内存,主机接口,直接转换收音机,无线局域网射频(RF）功能相结合的单一集成芯片。">
+<meta name="keywords" content="embedded, 88w8686, wifi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Marvell88W8686的SPI主控接口">
+<meta property="og:url" content="http://localhost:4000/2014/04/20/Marvell88W8686_SPI_Interface/">
+<meta property="og:site_name" content="Simpleyyt">
+<meta property="og:description" content="88w8686 是一款低成本、低功耗，支持IEEE 802.11a/g/b MAC/基带/射频(RF)无线局域网标准的片上系统,设计支持IEEE 802.11a/g标准的6、 9、12、18、24、36、48、54M 有效数据速率，和IEEE 802.11 b 标准的1、2、5.5、11 M 数据速率。88w8686 提供IEEE802.11/802.11 b 标准直接序列扩散光谱(DSSS),802.11a/ g 正交频分复用(OFDM)基带调制,媒体访问控制(MAC),CPU,内存,主机接口,直接转换收音机,无线局域网射频(RF）功能相结合的单一集成芯片。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184731593">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184736000">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184739406">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184743000">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184747203">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184751296">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184755281">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184803765">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184803765">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184808203">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184812765">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184816609">
+<meta property="og:image" content="http://img.blog.csdn.net/20130609184820203">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Marvell88W8686的SPI主控接口">
+<meta name="twitter:description" content="88w8686 是一款低成本、低功耗，支持IEEE 802.11a/g/b MAC/基带/射频(RF)无线局域网标准的片上系统,设计支持IEEE 802.11a/g标准的6、 9、12、18、24、36、48、54M 有效数据速率，和IEEE 802.11 b 标准的1、2、5.5、11 M 数据速率。88w8686 提供IEEE802.11/802.11 b 标准直接序列扩散光谱(DSSS),802.11a/ g 正交频分复用(OFDM)基带调制,媒体访问控制(MAC),CPU,内存,主机接口,直接转换收音机,无线局域网射频(RF）功能相结合的单一集成芯片。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20130609184731593">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://localhost:4000/"/>
+
+
+
+
+
+  <title>Marvell88W8686的SPI主控接口</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-67994495-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b7e141dfc0ea2b204682f94ab2e01a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simpleyyt</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Yitao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2014/04/20/Marvell88W8686_SPI_Interface/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simpleyyt">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/author.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simpleyyt">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Marvell88W8686的SPI主控接口
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-20T00:00:00+08:00">
+                2014-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Embedded" itemprop="url" rel="index">
+                    <span itemprop="name">Embedded</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/04/20/Marvell88W8686_SPI_Interface/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="/2014/04/20/Marvell88W8686_SPI_Interface/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>88w8686 是一款低成本、低功耗，支持IEEE 802.11a/g/b MAC/基带/射频(RF)无线局域网标准的片上系统,设计支持IEEE 802.11a/g标准的6、
+9、12、18、24、36、48、54M 有效数据速率，和IEEE 802.11 b 标准的1、2、5.5、11 M 数据速率。88w8686 提供IEEE802.11/802.11 b 标准直接序列扩散光谱(DSSS),802.11a/ g 正交频分复用(OFDM)基带调制,媒体访问控制(MAC),CPU,内存,主机接口,直接转换收音机,无线局域网射频(RF）功能相结合的单一集成芯片。</p>
+
+<!--more-->
+
+<p>88w8686 核心功能单元,通过一个高通量互联系统相互连接，如图所示。</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184731593" alt="" /></p>
+
+<p>88W8686 配备了一个完全集成的射频到基带收发器工作在2.4 GHz 的ISM 的802.11g/b端口WLAN应用和5 GHz的UNII WLA 802.11a的无线电波段的无线电波段。该收发器架构包括Marvell的第二代，专门设计用于手机通信。蜂窝频段发射杂散音，噪音和接收干扰被设计在其中。</p>
+
+<p>在手机中由于非常低的频谱发射接收频段，设备不会干扰手机接收和发送高
+功率移动电话传输信号。为了获得最佳性能，接收路径上集成的LNA 和AGC 增益调整无缝控制基带功能。整个接收路径已超过90 分贝电压增益。</p>
+
+<p>综合发射机正交基带信号转换，然后为2.4 GHz 和5 GHz 无线电频带传输提供外部功率放大器的RF 信号。</p>
+
+<p>本振频率产生一个完全集成的可编程频率合成器，无需任何外部元件。环路
+带宽优化相位噪声和动态效能集中在该芯片上。出于安全考虑，88W8686 支持IEEE 802.11i 安全标准，通过实施高级加密标准（AES）/计数器模式CBC - MAC 协议（CCMP），有线等效保密（WEP）临时密钥完整性协议（TKIP）安全机制。为视频，语音，和多媒体应用，88W8686 支持802.11e 的质量服务（QoS）。还支持蓝牙共存接口。88W8686 支持一个通用的SPI（G - SPI）和SDIO 主机接口，采用QFN 封装或倒装芯片封装。</p>
+
+<p>#88W8686 G-SPI主控接口#</p>
+
+<p>88W8686<em>主机接口单元(Host Interface Unit,HIU)</em>连接几个主机接口总线单元到设备(指88W8686)的内部总线上。每个HIU和其他HIU是通过共享到内部总线的连接，但88W8686每次只允许一个HIU被激活。</p>
+
+<p>88W8686的HIU支持G-SPI(通用的SPI)接口和SDIO接口。它支持一个通用的、半双工(half-duplex)、DMA辅助(DMA-assisted)的SPI接口，允许一个主控制器使用通用的SPI协议来访问WLAN设备(指88W8686)。G-SPI接口包含了外部SPI总线和内部共享总线之间的接口电路，如图所示：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184736000" alt="" /></p>
+
+<p>88W8686在SPI总线上表示为设备，主机单元能够直接访问G-SPI寄存器和通过使用BARs(Base Address Register，基地址寄存器)和DMA引擎来访问设备的共享内存。</p>
+
+<p>SPI单元支持通用的SPI接口协议，工作速率可达50MHz，此接口支持下面的功能：</p>
+
+<ol>
+  <li>SPI单元总线设备操作</li>
+  <li>SPI单元寄存器读写</li>
+  <li>对内部CPU产生中断</li>
+  <li>对外部SPI主控制器产生中断(比如S3C2451的SPI控制器)</li>
+  <li>通过DMA访问内部共享内存</li>
+  <li>对电源管理单元产生唤醒中断</li>
+</ol>
+
+<h1 id="g-spi接口信号描述">G-SPI接口信号描述</h1>
+
+<p>88W8686复位后，紧接着使用下面配置输入引脚来设置参数，但是在88W8686复位到一定时间之后，这些引脚立刻改为变他们通常的功能，比如GPIO[5]就作为通常的功能使用。如果要设置一个配置位为0，通过连接一个阻值为100 kΩ的下拉电阻，比如：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184739406" alt="" /></p>
+
+<p>如果要设置一个配置位为1，则不需要接外部电路</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184743000" alt="" /></p>
+
+<p>88W8686的配置引脚如下图所示：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184747203" alt="" /></p>
+
+<p>接下来看G-SPI接口引脚的说明：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184751296" alt="" /></p>
+
+<p>#G-SPI接口功能描述#</p>
+
+<p>G-SPI接口的标准G-SPI物理总线上支持多种简单的地址/数据协议，这些协议通过地址的位数和数据的顺序来区分。</p>
+
+<p>每次通讯由主机通过拉低SCSn信号来发起，从机在检测到SCSn有效(低电平)之后，在每个SCLK的上升沿锁存SDI引脚上输入的数据。当从机要输出数据时，在SCLK的下降沿送出数据。SCLK输入信号在每次通讯的开始和结束都为低电平，中断输入信号SINTn由设备发送给主机(比如S3C2451的SPI主控制器)</p>
+
+<p>##通讯时延(transaction delay)##</p>
+
+<p>第一个数据块是从主机发送到设备(从机)的，这个数据块包含一个地址和读/写标志，地址的最高位(MSB)如果为0表示读，如果为1表示写。</p>
+
+<ul>
+  <li>写操作时延(write Write Transaction Delay)
+    <blockquote>
+      <p>对于写操作，写操作的数据段紧跟着地址段，地址和数据段之间，不需要主机产生低时钟脉冲。</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>读操作时延(read Write Transaction Delay)</p>
+
+    <blockquote>
+      <p>读操作时，在总线上地址段之后和数据段之前要求有一些时延。这些时延表现为<em>TDDR(time delay read register，读寄存器时延)</em>和<em>TDRP(timedelay read port，读端口时延)</em>，这些时延表示设备需要需要一些时间来准备有效数据给主机。</p>
+    </blockquote>
+  </li>
+</ul>
+
+<p>有两种方式来建立这些时延：</p>
+
+<ul>
+  <li>第一种：主机通过发送一定数量的<em>虚拟时钟周期(a known number of dummyclock cycles)</em>到设备来创建读操作时延，这些虚拟时钟周期定义在<em>延迟读寄存器(delay readregister)</em>中，也就是说主机要发送的<em>虚拟时钟周期</em>数量由<em>延迟读寄存器</em>的值来定，下面来看此寄存器的定义：</li>
+</ul>
+
+<p><img src="http://img.blog.csdn.net/20130609184755281" alt="" /></p>
+
+<p>由上图可知<em>Delay Method</em>的值由<em>SPU Bus Mode寄存器</em>(<code class="highlighter-rouge">offset 0x70[2]=1</code>)的<em>Delay_Method</em>位的值来决定，下面来看此寄存器的定义：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184803765" alt="" /></p>
+
+<p>SPU(SPI host interface unit)表示SPI主机接口单元。</p>
+
+<ul>
+  <li>第二种：通过主机在地址段和数据段之间保持(holding)低时钟信号至少一段时间来创建读操作时延(the delay is created bythe host holding the clock signal low for a minimum period of time between the addressand data phases)，此模式通过设置<code class="highlighter-rouge">0x70[2]=0</code>来选择。</li>
+</ul>
+
+<p>在读操作的数据段区间，主机继续提供时钟脉冲和同时驱动数据到SDI输入引脚或从SDO输出引脚读取数据。</p>
+
+<p>##数据传输##</p>
+
+<p>主机经常访问G-SPI单元的配置寄存器，为了访问内部内存空间，一些寄存器被定义为端口寄存器。当访问端口寄存器时，从机使用相应的基地址寄存器(BAR)和DMA引擎来从内部内存空间读取数据，或是写入数据内部内存空间。</p>
+
+<p>主机和从机间的每一次传输都是<em>突发模式</em>(一个地址后面跟着多个数据)，在读或写完所要求数量的数据后，主机通过拉高SCSn引脚来结束此次传输。</p>
+
+<p>###端口寄存器访问####</p>
+
+<p>主机读<em>端口寄存器</em>时，对于<em>突发模式</em>的数据长度没有限制(除了内部总线的有效地址范围限制之外)。主机写端口寄存器时，对<em>突发模式</em>的数据长度唯一要求是：长度是DWORDS的倍数。</p>
+
+<p><em>端口寄存器</em>(I/O端口，命令端口，数据端口)被用来访问内部32-bit存储空间和总是32-bit对齐访问。每个端口寄存器都有一个相应的BAR用来读写(BAR作为一个指针指向要读写的内存空间的开始物理地址)。内存也只能32-bit对齐访问，这通过向相应的BAR写入32-bit对齐的数据来是实现，在访问期间，第16bits数据总线最先出现在总线上。</p>
+
+<ul>
+  <li>
+    <p>写数据到端口寄存器</p>
+
+    <blockquote>
+      <p>写数据到端口寄存器，就是依次填满起始位置在BAR的连续的32-bit内存空间。当从从机的数据和命令端口读数据时，DMA引擎连续填充FIFO知道剩余空间不足8个DWORDs。当写数据到设备时，拉高SCSn信号脚来清空FIFO。</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>从端口寄存器读数据</p>
+
+    <blockquote>
+      <p>当从设备的I/O端口读数据时，可以选择DMA引擎是执行单一读或是突发模式读。突发模式读与读端口和命令端口一样，单一模式读让DMA引擎在内部总线上指向单个DWORD访问。单一模式读通讯必须在返回数据的第一或是第二个16-bit块之后终止。</p>
+    </blockquote>
+  </li>
+</ul>
+
+<p>###配置寄存器访问###</p>
+
+<p>当主机访问端口寄存器之外的其他寄存器时，突发模式长度必须限制在一个16-bit的数，或是如果地址是以DWORD边界对齐的两个16-bit数。当内部总线的单元访问G-SPI接口寄存器，则必须是单个DWORD或是更小来访问。</p>
+
+<p>G-SPI除了端口寄存器之外的接口寄存器，都能以16-bit边界对齐的方式读或是写。当单个16-bit word被读出或写入，通讯可以被终止。</p>
+
+<p>##G-SI时钟频率##</p>
+
+<p>G-SPI时钟频率不能大于内部总线时钟频率的2.5倍，内部总线时钟频率</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184803765" alt="" /></p>
+
+<p>##数据格式##</p>
+
+<p>总共有16个有效数据格式，下面9个数据格式是可用的：</p>
+
+<ul>
+  <li>所有4读数据格式，在地址段和数据段之间的延迟时间，时钟信号保持为低电平。</li>
+  <li>所有4个写数据格式。</li>
+  <li>1个读数据格式，在地址段和数据段之间的延迟时间，时钟信号切换为固定数量的周期。</li>
+</ul>
+
+<p>每种读写操作类型都有两种地址长度，要么是8-bit要么是16-bit，而每种地址长度对应有两种数据顺序。</p>
+
+<p>###可编程的时钟周期延迟###</p>
+
+<p>下面是<code class="highlighter-rouge">Delay_Method=0</code>的读数据格式，在这种模式下，<code class="highlighter-rouge">tdr(r/p)</code>的值代表最后一个地址位和第一个数据位之间的延时时间，这段时间内时钟信号SCLK保持为低电平。有两个不同的延时值，包括从G-SPI配置寄存器读取的值和从G-SPI端口寄存器读取的值。一旦读写操作指定的时延期满，有效的数据就从设备中发出。</p>
+
+<ul>
+  <li>
+    <p>读数据格式</p>
+
+    <p><img src="http://img.blog.csdn.net/20130609184808203" alt="" /></p>
+  </li>
+  <li>
+    <p>写数据格式</p>
+
+    <p><img src="http://img.blog.csdn.net/20130609184812765" alt="" /></p>
+  </li>
+</ul>
+
+<p>###固定的时钟周期延迟###</p>
+
+<p>下面是读数据格式的例子：</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184816609" alt="" /></p>
+
+<p>目前我们G-SPI驱动读数据格式就是采用这种格式。</p>
+
+<p>##G-SPI接口寄存器内存空间##</p>
+
+<p><img src="http://img.blog.csdn.net/20130609184820203" alt="" /></p>
+
+<hr />
+
+<p><em>本文章转自：<a href="http://blog.csdn.net/loongembedded/article/details/9067013">http://blog.csdn.net/loongembedded/article/details/9067013</a></em></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div></div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="http://p1.bpimg.com/567571/9a4a158daee8aa69.png" alt="Simpleyyt Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/embedded" rel="tag"># embedded</a>
+          
+            
+            <a href="/tag/#/88w8686" rel="tag"># 88w8686</a>
+          
+            
+            <a href="/tag/#/wifi" rel="tag"># wifi</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/07/26/pagination_on_jekyll/" rel="next" title="在Jekyll上使用分页">
+                <i class="fa fa-chevron-left"></i> 在Jekyll上使用分页
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/04/18/delete_document_on_kindle_cloud/" rel="prev" title="批量删除Kindle云端的个人文档">
+                批量删除Kindle云端的个人文档 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+      <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/author.jpeg"
+               alt="Simpleyyt" />
+          <p class="site-author-name" itemprop="name">Simpleyyt</p>
+           
+              <p class="site-description motion-element" itemprop="description">Too simple, sometimes naive.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/simpleyyt" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/yaoyit" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#g-spi接口信号描述"> <span class="nav-number">1</span> <span class="nav-text">G-SPI接口信号描述</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simpleyyt</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://simpleyyt.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://localhost:4000/2014/04/20/Marvell88W8686_SPI_Interface/';
+          this.page.identifier = '/2014/04/20/Marvell88W8686_SPI_Interface/';
+          this.page.title = 'Marvell88W8686的SPI主控接口';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://simpleyyt.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

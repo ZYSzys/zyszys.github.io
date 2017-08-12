@@ -1,0 +1,1429 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="hxyd6b4vb-uzYY6dVuzz4KXhScoVoEUjtiRWYSJVlrY" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wifi,linux,driver," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Simpleyyt" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/author.jpeg?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="由于编写Marvel 88w8686 wlan模块SPI接口的stm32驱动的需要，对Marvel 88w8686 Linux SPI接口的驱动进行了分析和参考。">
+<meta name="keywords" content="wifi, linux, driver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Marvel 88w8686 Linux驱动分析">
+<meta property="og:url" content="http://localhost:4000/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/">
+<meta property="og:site_name" content="Simpleyyt">
+<meta property="og:description" content="由于编写Marvel 88w8686 wlan模块SPI接口的stm32驱动的需要，对Marvel 88w8686 Linux SPI接口的驱动进行了分析和参考。">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Marvel 88w8686 Linux驱动分析">
+<meta name="twitter:description" content="由于编写Marvel 88w8686 wlan模块SPI接口的stm32驱动的需要，对Marvel 88w8686 Linux SPI接口的驱动进行了分析和参考。">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://localhost:4000/"/>
+
+
+
+
+
+  <title>Marvel 88w8686 Linux驱动分析</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-67994495-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b7e141dfc0ea2b204682f94ab2e01a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simpleyyt</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Yitao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simpleyyt">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/author.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simpleyyt">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            Marvel 88w8686 Linux驱动分析
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-14T00:00:00+08:00">
+                2014-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Linux" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>由于编写Marvel 88w8686 wlan模块SPI接口的<em>stm32</em>驱动的需要，对<a href="http://pan.baidu.com/s/1dDiSZFb">Marvel 88w8686 Linux</a> SPI接口的驱动进行了分析和参考。</p>
+
+<!--more-->
+
+<p>#Marvel驱动的使用#</p>
+
+<p>88w8686的Linux驱动是通过模块方式载入内核的，在使用时加载进去就行了，88w8686的Linux驱动还包含了sdio的驱动，加载时，还必须加载sdio驱动。在运行<code class="highlighter-rouge">make</code>命令进行编译后，会生成<code class="highlighter-rouge">sdio.o</code>和<code class="highlighter-rouge">sd8386.o</code>文件，在终端下输入下列命令进行加载：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>insmod sdio.o
+insmod sd8385.o
+</code></pre>
+</div>
+
+<p>#Marvel驱动源码分析#</p>
+
+<p>了解完如何使用Marvel 88w8686 Linux驱动后，便可以进行驱动源码的分析。源码<a href="http://pan.baidu.com/s/1dDiSZFb">点击此处</a>下载。</p>
+
+<p>##源码目录结构##</p>
+
+<p>源码的目录结构如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>.
+├─app
+│  └─wlanconfig
+├─config
+├─if
+│  └─if_gspi
+├─io
+│  └─gspi
+│      └─pxa270
+├─os
+│  └─linux
+└─wlan
+</code></pre>
+</div>
+
+<p>其中<em>app文件夹</em>是驱动自带的wlanconfig工具，用于配置wifi的参数，本文不进行分析。<em>config文件夹</em>包含的是一些配置文件，不进行分析。if文件夹包含的是关于GSPI操作的接口，包括固件。<em>io文件夹</em>包含的是GSPI驱动。<em>os文件夹</em>包含的是与系统相关的操作与头文件。<em>wlan文件夹</em>是wifi驱动的主要目录，在本文进行重点分析。</p>
+
+<p>##驱动的启动流程##</p>
+
+<p>由上文可知，wlan驱动是通过<code class="highlighter-rouge">insmod</code>进加载的。在文件<code class="highlighter-rouge">wlan/wlan_main.c</code>末尾处可以看到：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>module_init(wlan_init_module);
+module_exit(wlan_cleanup_module);
+
+MODULE_DESCRIPTION("M-WLAN Driver");
+MODULE_AUTHOR("Marvell International Ltd.");
+</code></pre>
+</div>
+
+<p>这几个宏说明了wlan驱动模块的入口，知道其初始化函数是<code class="highlighter-rouge">wlan_init_module</code>。</p>
+
+<p>再来看看<code class="highlighter-rouge">wlan_init_module</code>函数，在其函数中，调用了以下函数对网卡插入和移除时调用的函数进行了注册，即当电脑检测到网卡时有调用<code class="highlighter-rouge">wlan_add_card</code>。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sbi_register(wlan_add_card, wlan_remove_card, NULL)
+</code></pre>
+</div>
+
+<p>在<code class="highlighter-rouge">wlan_add_card</code>中，进行初始化后，以下函数启动了内核主线程<code class="highlighter-rouge">wlan_service_main_thread</code>。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wlan_create_thread(wlan_service_main_thread, &amp;priv-&gt;MainThread, "wlan_main_service")
+</code></pre>
+</div>
+
+<p>###内核主线程###</p>
+
+<p>内核主线程<code class="highlighter-rouge">wlan_service_main_thread</code>承担了wlan驱动的主要工作，它主要是处理wlan固件的事件，wlan固件接受到的数据和内核传来的数据。</p>
+
+<p>在<code class="highlighter-rouge">wlan_service_main_thread</code>函数中有一个<code class="highlighter-rouge">for</code>死循环，所有数据处理都在循环里面。</p>
+
+<p>在主循环里面，首先调用：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>OS_SET_THREAD_STATE(TASK_INTERRUPTIBLE);
+...
+schedule();
+</code></pre>
+</div>
+
+<p>让主线程进入可中断的等待模式，等到事件到来。当主线程被唤醒时，即有数据要处理，便调用：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sbi_get_int_status(priv, &amp;ireg)；
+...
+Adapter-&gt;HisRegCpy |= ireg;
+</code></pre>
+</div>
+
+<p>先读取网卡固件发来的数据及标志位，将标志位存入<code class="highlighter-rouge">Adapter-&gt;HisRegCpy</code>。</p>
+
+<p>紧接着便对标志位进行判断：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/* Command response? */
+if (Adapter-&gt;HisRegCpy &amp; HIS_CmdUpLdRdy) {
+	PRINTM(INFO, "main-thread: Cmd response ready.\n");
+
+	OS_INT_DISABLE;
+	Adapter-&gt;HisRegCpy &amp;= ~HIS_CmdUpLdRdy;
+	OS_INT_RESTORE;
+
+	wlan_process_rx_command(priv);
+}
+
+/* Any received data? */
+if (Adapter-&gt;HisRegCpy &amp; HIS_RxUpLdRdy) {
+	PRINTM(INFO, "main-thread: Rx Packet ready.\n");
+	
+	OS_INT_DISABLE;
+	Adapter-&gt;HisRegCpy &amp;= ~HIS_RxUpLdRdy;
+	OS_INT_RESTORE;
+
+	wlan_send_rxskbQ(priv);
+}
+
+/* Any Card Event */
+if (Adapter-&gt;HisRegCpy &amp; HIS_CardEvent) {
+	PRINTM(INFO, "main-thread: Card Event Activity.\n");
+
+	OS_INT_DISABLE;
+	Adapter-&gt;HisRegCpy &amp;= ~HIS_CardEvent;
+	OS_INT_RESTORE;
+
+	if (sbi_read_event_cause(priv)) {
+		PRINTM(MSG, "main-thread: sbi_read_event_cause failed.\n");
+		continue;
+	}
+	wlan_process_event(priv);
+}
+</code></pre>
+</div>
+
+<p>并且调用相应的处理函数，对数据进行处理。</p>
+
+<p>当然进程中还对wlan的PS（Power Save）模式和WMM（WiFi-MultiMedia）进行判断处理，本文不进行分析。</p>
+
+<p>接着，便对内核发来的命令进行处理（比如说连接命令，扫描命令）：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/* Execute the next command */
+if (!priv-&gt;wlan_dev.dnld_sent &amp;&amp; !Adapter-&gt;CurCmd) {
+	ExecuteNextCommand(priv);
+}
+</code></pre>
+</div>
+
+<p>当然，之后便进入等待事件状态，重复以上过程。</p>
+
+<p>###wlan固件数据/事件###</p>
+
+<p>当wlan固件有数据/事件时，GSPI驱动会产生中断，它的中断处理函数为<code class="highlighter-rouge">sbi_interrupt</code>，在<code class="highlighter-rouge">sbi_interrupt</code>中调用了<code class="highlighter-rouge">wlan_interrupt</code>,在<code class="highlighter-rouge">wlan_interrupt</code>中，调用</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wake_up_interruptible(&amp;priv-&gt;MainThread.waitQ);
+</code></pre>
+</div>
+
+<p>唤醒了主线程，对数据进行处理。上面介绍过，主线程调用<code class="highlighter-rouge">sbi_get_int_status(priv, &amp;ireg)</code>读取数据和标志位。</p>
+
+<p>###应用层调用驱动接口###</p>
+
+<p>该wlan驱动接口是wext（Wireless Extensions无线扩展接口）。wext的接口实现上，应用层采用ioctl方式访问驱动，设置无线参数或者获取无线参数，配置无线驱动进行联网操作。无线驱动事件到应用层的传递采用的netlink socket技术，一种netlink route消息技术。这也是很多其他类型的驱动标准的实现方法。具体调用方法可以参考<code class="highlighter-rouge">wlanconfig</code>，比如说</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ioctl(sockfd, SIOCGIWSCAN, &amp;iwr));
+</code></pre>
+</div>
+
+<p>调用wlan驱动扫描命令。如下函数</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>s = socket(PF_INET, SOCK_DGRAM, 0);
+</code></pre>
+</div>
+
+<p>新建了一个netlink连接。</p>
+
+<p>所有的ioctl的回调函数在，wlan_wext.c的<code class="highlighter-rouge">wlan_handler</code>数组中，这里对<code class="highlighter-rouge">SIOCGIWSCAN</code>即wlan扫描进行分析。可以看到wlan扫描的回调函数是<code class="highlighter-rouge">wlan_get_scan</code>和<code class="highlighter-rouge">wlan_set_scan</code>。</p>
+
+<p>先来看看<code class="highlighter-rouge">wlan_set_scan</code>，在<code class="highlighter-rouge">wlan_set_scan</code>函数中又调用了<code class="highlighter-rouge">wlan_scan_networks</code>,在<code class="highlighter-rouge">wlan_scan_networks</code>中调用了<code class="highlighter-rouge">wlan_scan_channel_list</code>将命令添加到命令队列中，并等待命令执行响应，然后调用<code class="highlighter-rouge">wlan_scan_process_results</code>更新<code class="highlighter-rouge">priv</code>中的扫描表。</p>
+
+<p>在函数<code class="highlighter-rouge">wlan_scan_channel_list</code>中调用<code class="highlighter-rouge">PrepareAndSendCommand</code>将命令添加到命令列表。等发送到固件的数据和固件发送过来的数据都存在<code class="highlighter-rouge">CmdNode-&gt;BufVirtualAddr</code>指针指向的数据中，接着调用</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>QueueCmd(Adapter, CmdNode, TRUE);
+wake_up_interruptible(&amp;priv-&gt;MainThread.waitQ);
+</code></pre>
+</div>
+
+<p>将命令加入命令队列，接着唤醒主线程处理命令，然后执行如下函数</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wait_event_interruptible(CmdNode-&gt;cmdwait_q, CmdNode-&gt;CmdWaitQWoken);
+</code></pre>
+</div>
+
+<p>等待结果，当<code class="highlighter-rouge">CmdNode-&gt;CmdWaitQWoken</code>为<code class="highlighter-rouge">TRUE</code>时唤醒。</p>
+
+<p>在主线程中，由上面知道，调用<code class="highlighter-rouge">ExecuteNextCommand</code>执行内核发来的命令。在<code class="highlighter-rouge">ExecuteNextCommand</code>函数中调用<code class="highlighter-rouge">DownloadCommandToStation</code>下载命令，<code class="highlighter-rouge">DownloadCommandToStation</code>中，先调用<code class="highlighter-rouge">sbi_host_to_card</code>下载命令，然后调用<code class="highlighter-rouge">ModTimer</code>进行超时时重新发送。</p>
+
+<p>接下来，便是等待响应，当固件对发来的命令响应时，会触发中断，如上文说的调用<code class="highlighter-rouge">wlan_process_rx_command</code>处理固件对命令的响应。在<code class="highlighter-rouge">wlan_process_rx_command</code>中处理完成之后，会调用<code class="highlighter-rouge">CleanupAndInsertCmd</code>回收命令，此时的<code class="highlighter-rouge">CmdNode-&gt;CmdWaitQWoken</code>为<code class="highlighter-rouge">TRUE</code>，下次<code class="highlighter-rouge">schedule</code>时便，唤醒上面等待命令响应的线程，让其继续执行。</p>
+
+<p>整个驱动运行的流程便是这样子。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div></div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="http://p1.bpimg.com/567571/9a4a158daee8aa69.png" alt="Simpleyyt Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/wifi" rel="tag"># wifi</a>
+          
+            
+            <a href="/tag/#/linux" rel="tag"># linux</a>
+          
+            
+            <a href="/tag/#/driver" rel="tag"># driver</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/04/15/qf9700_for_linux_3.0.8/" rel="next" title="QF9700 Linux 3.0.8驱动补丁">
+                <i class="fa fa-chevron-left"></i> QF9700 Linux 3.0.8驱动补丁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2012/11/24/c_on_android/" rel="prev" title="强化你的Terminal IDE——在android平板/手机上编写C/C++">
+                强化你的Terminal IDE——在android平板/手机上编写C/C++ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+      <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/author.jpeg"
+               alt="Simpleyyt" />
+          <p class="site-author-name" itemprop="name">Simpleyyt</p>
+           
+              <p class="site-description motion-element" itemprop="description">Too simple, sometimes naive.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/simpleyyt" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/yaoyit" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simpleyyt</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://simpleyyt.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://localhost:4000/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/';
+          this.page.identifier = '/2014/04/14/marvel_88w8686_wifi_linux_driver_analysis/';
+          this.page.title = 'Marvel 88w8686 Linux驱动分析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://simpleyyt.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
