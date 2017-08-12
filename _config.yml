@@ -4,10 +4,10 @@
 # ---------------------------------------------------------------
 
 # Site
-title: Simpleyyt
-subtitle: Yitao's Blog
-description: Too simple, sometimes naive.
-author: Simpleyyt
+title: ZYSzys
+subtitle: ZYSzys's Blog
+description: Just for fun.
+author: ZYSzys
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
 language: zh-Hans
 date_format: '%Y-%m-%d'
@@ -64,7 +64,7 @@ feed:
 
 # Plugins
 ## Docs: https://help.github.com/articles/configuring-jekyll-plugins/
-gems:
+plugins:
 # jemoji conficts with toc in some no-ascii post
  - jemoji
  - jekyll-sitemap
@@ -88,7 +88,7 @@ keywords: "Jekyll, NexT, simpleyyt, yitao"
 rss:
 
 # Specify the date when the site was setup
-since: 2015
+since: 2017
 
 # icon between year and author @Footer
 authoricon: heart
@@ -215,8 +215,8 @@ font:
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
-  GitHub: https://github.com/simpleyyt
-  知乎: http://www.zhihu.com/people/yaoyit
+  GitHub: https://github.com/ZYSzys
+  知乎: http://www.zhihu.com/people/zhang-yong-sheng-82-92
 
 
 # Social Links Icons
