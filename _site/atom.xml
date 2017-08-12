@@ -1,31 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-12T13:53:45+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">POJ 1113 Wall(简单凸包)</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall(简单凸包)" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-12T18:40:21+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">POJ 1113 Wall(简单凸包)</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall(简单凸包)" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;简单的凸包模版题&lt;/p&gt;
 
 &lt;!--more--&gt;
 
-&lt;h2 id=&quot;wall&quot;&gt;Wall&lt;/h2&gt;
+&lt;h1 id=&quot;wall&quot;&gt;Wall&lt;/h1&gt;
 
 &lt;p&gt;Time Limit: 1000MS      Memory Limit: 10000K
 Total Submissions: 37869        Accepted: 12907&lt;/p&gt;
 
-&lt;h2 id=&quot;description&quot;&gt;Description&lt;/h2&gt;
+&lt;h3 id=&quot;description&quot;&gt;Description&lt;/h3&gt;
 
 &lt;p&gt;Once upon a time there was a greedy King who ordered his chief Architect to build a wall around the King’s castle. The King was so greedy, that he would not listen to his Architect’s proposals to build a beautiful brick wall with a perfect shape and nice tall towers. Instead, he ordered to build the wall around the whole castle using the least amount of stone and labor, but demanded that the wall should not come closer to the castle than a certain distance. If the King finds that the Architect has used more resources to build the wall than it was absolutely necessary to satisfy those requirements, then the Architect will loose his head. Moreover, he demanded Architect to introduce at once a plan of the wall listing the exact amount of resources that are needed to build the wall.&lt;/p&gt;
 
 &lt;p&gt;Your task is to help poor Architect to save his head, by writing a program that will find the minimum possible length of the wall that he could build around the castle to satisfy King’s requirements.&lt;/p&gt;
 
-&lt;p&gt;The task is somewhat simplified by the fact, that the King’s castle has a polygonal shape and is situated on a flat ground. The Architect has already established a Cartesian coordinate system and has precisely measured the coordinates of all castle’s vertices in feet.
-Input&lt;/p&gt;
+&lt;p&gt;The task is somewhat simplified by the fact, that the King’s castle has a polygonal shape and is situated on a flat ground. The Architect has already established a Cartesian coordinate system and has precisely measured the coordinates of all castle’s vertices in feet.&lt;/p&gt;
+
+&lt;h3 id=&quot;input&quot;&gt;Input&lt;/h3&gt;
 
 &lt;p&gt;The first line of the input file contains two integer numbers N and L separated by a space. N (3 &amp;lt;= N &amp;lt;= 1000) is the number of vertices in the King’s castle, and L (1 &amp;lt;= L &amp;lt;= 1000) is the minimal number of feet that King allows for the wall to come close to the castle.&lt;/p&gt;
 
-&lt;p&gt;Next N lines describe coordinates of castle’s vertices in a clockwise order. Each line contains two integer numbers Xi and Yi separated by a space (-10000 &amp;lt;= Xi, Yi &amp;lt;= 10000) that represent the coordinates of ith vertex. All vertices are different and the sides of the castle do not intersect anywhere except for vertices.
-Output&lt;/p&gt;
+&lt;p&gt;Next N lines describe coordinates of castle’s vertices in a clockwise order. Each line contains two integer numbers Xi and Yi separated by a space (-10000 &amp;lt;= Xi, Yi &amp;lt;= 10000) that represent the coordinates of ith vertex. All vertices are different and the sides of the castle do not intersect anywhere except for vertices.&lt;/p&gt;
+
+&lt;h3 id=&quot;output&quot;&gt;Output&lt;/h3&gt;
 
 &lt;p&gt;Write to the output file the single number that represents the minimal possible length of the wall in feet that could be built around the castle to satisfy King’s requirements. You must present the integer number of feet to the King, because the floating numbers are not invented yet. However, you must round the result in such a way, that it is accurate to 8 inches (1 foot is equal to 12 inches), since the King will not tolerate larger error in the estimates.&lt;/p&gt;
 
-&lt;p&gt;Sample Input&lt;/p&gt;
+&lt;h3 id=&quot;sample-input&quot;&gt;Sample Input&lt;/h3&gt;
 
 &lt;p&gt;9 100
 200 400
@@ -38,19 +40,20 @@ Output&lt;/p&gt;
 350 200
 200 200&lt;/p&gt;
 
-&lt;p&gt;Sample Output&lt;/p&gt;
+&lt;h3 id=&quot;sample-output&quot;&gt;Sample Output&lt;/h3&gt;
 
 &lt;p&gt;1628&lt;/p&gt;
 
-&lt;p&gt;Hint&lt;/p&gt;
+&lt;h3 id=&quot;hint&quot;&gt;Hint&lt;/h3&gt;
 
 &lt;p&gt;结果四舍五入就可以了&lt;/p&gt;
 
-&lt;p&gt;Source&lt;/p&gt;
+&lt;h3 id=&quot;source&quot;&gt;Source&lt;/h3&gt;
 
 &lt;p&gt;Northeastern Europe 2001&lt;/p&gt;
 
-&lt;h3 id=&quot;简单的凸包模版题&quot;&gt;简单的凸包模版题&lt;/h3&gt;
+&lt;h2 id=&quot;简单的凸包模版题&quot;&gt;简单的凸包模版题&lt;/h2&gt;
+
 &lt;p&gt;题意: 输入凸包顶点数N和城墙与城堡之间距离L，接下来输入N个凸包顶点的坐标，求城墙周长&lt;/p&gt;
 
 &lt;p&gt;分析: 城墙周长＝凸包周长＋一个以L为半径的圆的周长&lt;/p&gt;
@@ -144,7 +147,7 @@ Output&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Hello World 的编译链接概述</title><link href="http://localhost:4000/2017/02/12/helloworld-compile-and-link/" rel="alternate" type="text/html" title="Hello World 的编译链接概述" /><published>2017-02-12T00:00:00+08:00</published><updated>2017-02-12T00:00:00+08:00</updated><id>http://localhost:4000/2017/02/12/helloworld-compile-and-link</id><content type="html" xml:base="http://localhost:4000/2017/02/12/helloworld-compile-and-link/">&lt;p&gt;《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。&lt;/p&gt;
+&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Hello World 的编译链接概述</title><link href="http://localhost:4000/2016/12/30/helloworld-compile-and-link/" rel="alternate" type="text/html" title="Hello World 的编译链接概述" /><published>2016-12-30T00:00:00+08:00</published><updated>2016-12-30T00:00:00+08:00</updated><id>http://localhost:4000/2016/12/30/helloworld-compile-and-link</id><content type="html" xml:base="http://localhost:4000/2016/12/30/helloworld-compile-and-link/">&lt;p&gt;《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -924,7 +927,7 @@ Hello World
 &lt;/code&gt;&lt;/pre&gt;
     &lt;/div&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。</summary></entry><entry><title type="html">C++对象模型之复制构造函数</title><link href="http://localhost:4000/2015/09/22/cpp-object-model-copy-constructor/" rel="alternate" type="text/html" title="C++对象模型之复制构造函数" /><published>2015-09-22T00:00:00+08:00</published><updated>2015-09-22T00:00:00+08:00</updated><id>http://localhost:4000/2015/09/22/cpp-object-model-copy-constructor</id><content type="html" xml:base="http://localhost:4000/2015/09/22/cpp-object-model-copy-constructor/">&lt;p&gt;&lt;em&gt;“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个”&lt;/em&gt; 这句话是不对的，当 class 展现 &lt;strong&gt;bitwise copy semanics&lt;/strong&gt; 时，编译器才会产生出来。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。</summary></entry><entry><title type="html">C++对象模型之复制构造函数</title><link href="http://localhost:4000/2016/09/22/cpp-object-model-copy-constructor/" rel="alternate" type="text/html" title="C++对象模型之复制构造函数" /><published>2016-09-22T00:00:00+08:00</published><updated>2016-09-22T00:00:00+08:00</updated><id>http://localhost:4000/2016/09/22/cpp-object-model-copy-constructor</id><content type="html" xml:base="http://localhost:4000/2016/09/22/cpp-object-model-copy-constructor/">&lt;p&gt;&lt;em&gt;“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个”&lt;/em&gt; 这句话是不对的，当 class 展现 &lt;strong&gt;bitwise copy semanics&lt;/strong&gt; 时，编译器才会产生出来。&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -1048,7 +1051,7 @@ Hello World
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;这时候编译器必须安插代码以设定 virtual base class offset 的初值。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个” 这句话是不对的，当 class 展现 bitwise copy semanics 时，编译器才会产生出来。</summary></entry><entry><title type="html">C++ 对象模型之构造函数</title><link href="http://localhost:4000/2015/09/21/cpp-object-model-constructor/" rel="alternate" type="text/html" title="C++ 对象模型之构造函数" /><published>2015-09-21T00:00:00+08:00</published><updated>2015-09-21T00:00:00+08:00</updated><id>http://localhost:4000/2015/09/21/cpp-object-model-constructor</id><content type="html" xml:base="http://localhost:4000/2015/09/21/cpp-object-model-constructor/">&lt;p&gt;看看以下这段代码：&lt;/p&gt;
+&lt;p&gt;这时候编译器必须安插代码以设定 virtual base class offset 的初值。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个” 这句话是不对的，当 class 展现 bitwise copy semanics 时，编译器才会产生出来。</summary></entry><entry><title type="html">C++ 对象模型之构造函数</title><link href="http://localhost:4000/2016/09/21/cpp-object-model-constructor/" rel="alternate" type="text/html" title="C++ 对象模型之构造函数" /><published>2016-09-21T00:00:00+08:00</published><updated>2016-09-21T00:00:00+08:00</updated><id>http://localhost:4000/2016/09/21/cpp-object-model-constructor</id><content type="html" xml:base="http://localhost:4000/2016/09/21/cpp-object-model-constructor/">&lt;p&gt;看看以下这段代码：&lt;/p&gt;
 
 &lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Foo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pnext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
 
@@ -1210,7 +1213,7 @@ Hello World
   &lt;/ol&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;如你所见，没有一个是真的。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">看看以下这段代码： class Foo { public: int val; Foo *pnext; }; void foo_bar() { Foo bar; if (bar.val || bar.pnext ) // ... do somthing // ... } 上述程序并不会合成出一个 default constructor。什么时候会合成出 default constructor 呢，下面分4种情况。</summary></entry><entry><title type="html">C++ 之迭代器与算法</title><link href="http://localhost:4000/2015/09/21/cpp-iterator-and-algorithm/" rel="alternate" type="text/html" title="C++ 之迭代器与算法" /><published>2015-09-21T00:00:00+08:00</published><updated>2015-09-21T00:00:00+08:00</updated><id>http://localhost:4000/2015/09/21/cpp-iterator-and-algorithm</id><content type="html" xml:base="http://localhost:4000/2015/09/21/cpp-iterator-and-algorithm/">&lt;p&gt;C++ 有插入迭代器、流迭代器、反向迭代器、移动迭代器，泛型算法结构有适用的迭代器类别：输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器。&lt;/p&gt;
+&lt;p&gt;如你所见，没有一个是真的。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">看看以下这段代码： class Foo { public: int val; Foo *pnext; }; void foo_bar() { Foo bar; if (bar.val || bar.pnext ) // ... do somthing // ... } 上述程序并不会合成出一个 default constructor。什么时候会合成出 default constructor 呢，下面分4种情况。</summary></entry><entry><title type="html">C++ 之迭代器与算法</title><link href="http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm/" rel="alternate" type="text/html" title="C++ 之迭代器与算法" /><published>2016-09-21T00:00:00+08:00</published><updated>2016-09-21T00:00:00+08:00</updated><id>http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm</id><content type="html" xml:base="http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm/">&lt;p&gt;C++ 有插入迭代器、流迭代器、反向迭代器、移动迭代器，泛型算法结构有适用的迭代器类别：输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器。&lt;/p&gt;
 
 &lt;!--more--&gt;
 
