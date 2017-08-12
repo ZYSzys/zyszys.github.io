@@ -2,6 +2,75 @@
 <search>
   
     <entry>
+      <title><![CDATA[蔡勒公式]]></title>
+      <url>/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/</url>
+      <content type="html"><![CDATA[<h1 id="蔡勒公式c语言">蔡勒公式C语言</h1>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="c1">//
+//  main.c
+//  10.22.3(translate day to weekday)
+//
+//  Created by ZYSzys on 16/10/22.
+//  Copyright © 2016年 ZYSzys. All rights reserved.
+//
+</span>
+<span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="nf">getWeekdayByYearday</span><span class="p">(</span><span class="kt">int</span> <span class="n">iY</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iM</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iD</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">iWeekDay</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">==</span> <span class="n">iM</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">iM</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">iM</span> <span class="o">+=</span> <span class="mi">12</span><span class="p">;</span>
+        <span class="n">iY</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">iWeekDay</span> <span class="o">=</span> <span class="p">(</span><span class="n">iD</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">iM</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">iM</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">400</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="k">switch</span><span class="p">(</span><span class="n">iWeekDay</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Sunday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Monday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Tuesday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">3</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Wednesday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Thursday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">5</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Friday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Saturday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span> <span class="o">:</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="o">=</span><span class="sc">'1'</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">ch</span> <span class="o">!=</span> <span class="sc">'\033'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">请输入日期：</span><span class="se">\n</span><span class="s">格式为：1900,1,1</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d,%d,%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">year</span><span class="p">,</span><span class="o">&amp;</span><span class="n">month</span><span class="p">,</span><span class="o">&amp;</span><span class="n">day</span><span class="p">);</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">getWeekdayByYearday</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"WeekDay : %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+]]></content>
+      <categories>
+        
+          <category> Template </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> 数学 </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
       <title><![CDATA[今夕何夕]]></title>
       <url>/2017/08/12/HDU6112/</url>
       <content type="html"><![CDATA[<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=6112">HDU 6112 今夕何夕</a></p>

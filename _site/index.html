@@ -338,6 +338,207 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZYSzys">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/author.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZYSzys">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/" itemprop="url">
+                蔡勒公式
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-12T00:00:00+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Template" itemprop="url" rel="index">
+                    <span itemprop="name">Template</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="蔡勒公式c语言">蔡勒公式C语言</h1>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="c1">//
+//  main.c
+//  10.22.3(translate day to weekday)
+//
+//  Created by ZYSzys on 16/10/22.
+//  Copyright © 2016年 ZYSzys. All rights reserved.
+//
+</span>
+<span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="nf">getWeekdayByYearday</span><span class="p">(</span><span class="kt">int</span> <span class="n">iY</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iM</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iD</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">iWeekDay</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">==</span> <span class="n">iM</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">iM</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">iM</span> <span class="o">+=</span> <span class="mi">12</span><span class="p">;</span>
+        <span class="n">iY</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">iWeekDay</span> <span class="o">=</span> <span class="p">(</span><span class="n">iD</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">iM</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">iM</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">400</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="k">switch</span><span class="p">(</span><span class="n">iWeekDay</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Sunday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Monday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Tuesday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">3</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Wednesday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Thursday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">5</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Friday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="p">:</span> <span class="k">return</span> <span class="s">"Saturday"</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span> <span class="o">:</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="o">=</span><span class="sc">'1'</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">ch</span> <span class="o">!=</span> <span class="sc">'\033'</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">请输入日期：</span><span class="se">\n</span><span class="s">格式为：1900,1,1</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d,%d,%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">year</span><span class="p">,</span><span class="o">&amp;</span><span class="n">month</span><span class="p">,</span><span class="o">&amp;</span><span class="n">day</span><span class="p">);</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">getWeekdayByYearday</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"WeekDay : %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/#" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://localhost:4000/2017/08/12/HDU6112/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2208,7 +2409,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2219,7 +2420,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
