@@ -85,7 +85,7 @@
 <link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="cpp," />
+  <meta name="keywords" content="Mac," />
 
 
 
@@ -113,17 +113,17 @@
 
 
 
-<meta name="description" content="《C++ Primer》笔记，整理关于函数重载与函数匹配的笔记。">
-<meta name="keywords" content="cpp">
+<meta name="description" content=".DS_Store 文件是什么？ .DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。">
+<meta name="keywords" content="Mac">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++ 函数重载与函数匹配">
-<meta property="og:url" content="http://localhost:4000/2016/12/17/function-overload-and-match/">
+<meta property="og:title" content="Mac知识整合">
+<meta property="og:url" content="http://localhost:4000/2017/08/08/macTips/">
 <meta property="og:site_name" content="ZYSzys">
-<meta property="og:description" content="《C++ Primer》笔记，整理关于函数重载与函数匹配的笔记。">
+<meta property="og:description" content=".DS_Store 文件是什么？ .DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++ 函数重载与函数匹配">
-<meta name="twitter:description" content="《C++ Primer》笔记，整理关于函数重载与函数匹配的笔记。">
+<meta name="twitter:title" content="Mac知识整合">
+<meta name="twitter:description" content=".DS_Store 文件是什么？ .DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -156,7 +156,7 @@
 
 
 
-  <title>C++ 函数重载与函数匹配</title>
+  <title>Mac知识整合</title>
   
 
 
@@ -335,7 +335,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2016/12/17/function-overload-and-match/">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2017/08/08/macTips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ZYSzys">
@@ -355,7 +355,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            C++ 函数重载与函数匹配
+            Mac知识整合
           
         </h1>
         
@@ -369,8 +369,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-17T00:00:00+08:00">
-                2016-12-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T00:00:00+08:00">
+                2017-08-08
               </time>
             
 
@@ -393,8 +393,8 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Program" itemprop="url" rel="index">
-                    <span itemprop="name">Program</span>
+                  <a href="/category/#/Tools" itemprop="url" rel="index">
+                    <span itemprop="name">Tools</span>
                   </a>
                 </span>
 
@@ -431,278 +431,110 @@
       
 
       
-        <p>《C++ Primer》笔记，整理关于函数重载与函数匹配的笔记。</p>
+        <h3 id="ds_store-文件是什么">.DS_Store 文件是什么？</h3>
+
+<p>.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。</p>
 
 <!--more-->
 
-<h2 id="函数重载">函数重载</h2>
+<p>1，禁止.DS_store 生成：           <br />
+打开 “终端” ，复制黏贴下面的命令，回车执行，重启Mac即可生效。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//原函数
-</span>
-<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//正确：形参类型不同
-</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// 正确：形参个数不同
-</span><span class="kt">int</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//错误：只有返回类型不同
-</span>
-<span class="k">typedef</span> <span class="kt">int</span> <span class="n">int32</span><span class="p">;</span>
-<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">int32</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//与原函数等价：形参类型相同
-</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span><span class="p">);</span> <span class="c1">//与原函数等价：顶层 const 将被忽略
-</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span> <span class="c1">//与原函数等价：只是省略了形参名字
-</span></code></pre>
+<div class="highlighter-rouge"><pre class="highlight"><code>defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+</code></pre>
 </div>
 
-<p><strong>函数重载有如下的规则：</strong></p>
+<p>2，恢复.DS_store生成：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+</code></pre>
+</div>
+
+<h3 id="显示隐藏文件">显示隐藏文件</h3>
+
+<p>在终端执行命令，显示隐藏文件</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>defaults write com.apple.finder AppleShowAllFiles -bool true
+</code></pre>
+</div>
+
+<p>恢复隐藏</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>defaults write com.apple.finder AppleShowAllFiles -bool false
+</code></pre>
+</div>
+
+<p>执行命令后需要重新打开能看到效果。</p>
+
+<h3 id="切换-pyhton-环境">切换 Pyhton 环境</h3>
+
+<p>我本地之前 Python 环境是 2.7.10 ，然后学习 Tensorflow 的时候，安装了 Python 3.5.2 ，把系统默认 Pyton 环境也设置成了 3.5.2 版本，今天运行以前写的 python 脚本发现运行不了了，因为python 2.7 和 3.5 的 语法有挺多改动，现在我需要把系统的 python 环境回退到 2.7。</p>
+
+<p>可以直接修改 <code class="highlighter-rouge">~/.bash_profile</code> 文件。</p>
 
 <ul>
-  <li>名字相同，形参类型不一样。</li>
-  <li>不允许两个函数除了返回类型外其他所有的要素都相同。</li>
-  <li>顶层<code class="highlighter-rouge">const</code>的形参无法和没有顶层<code class="highlighter-rouge">const</code>的形参区分。</li>
+  <li>1、修改 <code class="highlighter-rouge">vim ~/.bash_profile</code></li>
 </ul>
 
-<p>其中返回类型不同时编译时会出错，而类型别名、项层<code class="highlighter-rouge">const</code>、省略形参名字只是重复声明而已，只要不定义，编译就不会出错，比如：</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//只定义了其中一个
-</span><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>修改方式有很多种，使用 vim  ，或者 cd ~/ 然后 open . 打开文件夹，找到 .bash_profile 文件，双击打开。
 </code></pre>
 </div>
-
-<h2 id="函数匹配">函数匹配</h2>
-
-<h3 id="名字查找">名字查找</h3>
-
-<p>函数匹配的第一步便是<strong>名字查找（name lookup）</strong>，确定<strong>候选函数</strong>。</p>
-
-<p>名字查找有两方面：</p>
 
 <ul>
-  <li>常规查找（normal lookup）</li>
-  <li>实参决定的查找（argument-dependent lookup，ADL）</li>
+  <li>2、在<code class="highlighter-rouge">.bash_profile</code> 文件里添加下面参数</li>
 </ul>
 
-<p>所有函数调用都会进行常规查找，只有函数的实参包括类类型对象或指向类类型对象的指针/引用的时候，才会进行实参决定的查找。</p>
-
-<p><strong>常规查找</strong></p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">);</span>	<span class="c1">//1
-</span><span class="k">namespace</span> <span class="n">N</span>
-<span class="p">{</span>
-	<span class="c1">//作用域
-</span>	<span class="kt">void</span> <span class="n">func</span><span class="p">()</span> <span class="p">{}</span>	<span class="c1">//2
-</span>	<span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span>	<span class="c1">//3
-</span>	<span class="p">...</span>
-	<span class="kt">void</span> <span class="n">test1</span><span class="p">()</span>
-	<span class="p">{</span>
-		<span class="n">func</span><span class="p">();</span> <span class="c1">//候选函数为函数2和3
-</span>	<span class="p">}</span>
-	
-	<span class="kt">void</span> <span class="n">test2</span><span class="p">()</span>
-	<span class="p">{</span>
-		<span class="k">using</span> <span class="o">::</span><span class="n">func</span><span class="p">;</span> <span class="c1">//将函数1加入当前作用域
-</span>		<span class="n">func</span><span class="p">();</span> <span class="c1">//候选函数为函数1
-</span>	<span class="p">}</span>
-	<span class="p">...</span>
-<span class="p">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>alias python="/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7"
 </code></pre>
 </div>
-
-<p>从函数被调用的局部作用域开始，逐渐向上层寻找被调用的名字，一旦找到就停止向上寻找，将找到的所有名字加入候选函数。</p>
-
-<p>此外，using语句可以将其他作用域的名字引用到当前作用域。</p>
-
-<p><strong>ADL查找</strong></p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//1
-//第一个实参所在命名空间
-</span><span class="k">namespace</span> <span class="n">Name1</span> <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">T</span> <span class="p">{</span>
-        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//2
-</span>    <span class="p">};</span>
-    <span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//3
-</span><span class="p">}</span>
-<span class="c1">//第二个实参的间接父类所在命名空间
-</span><span class="k">namespace</span> <span class="n">Name00</span> <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">T00</span> <span class="p">{</span>
-        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//4
-</span>    <span class="p">};</span>
-    <span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//5
-</span><span class="p">}</span>
-<span class="c1">//第二个实参父类所在命名空间
-</span><span class="k">namespace</span> <span class="n">Name0</span> <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">T0</span><span class="o">:</span><span class="k">public</span> <span class="n">Name00</span><span class="o">::</span><span class="n">T00</span> <span class="p">{</span>
-        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//6
-</span>    <span class="p">};</span>
-    <span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//7
-</span><span class="p">}</span>
-<span class="c1">//第二个实参所在命名空间
-</span><span class="k">namespace</span> <span class="n">Name2</span> <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">T</span><span class="o">:</span><span class="k">public</span> <span class="n">Name0</span><span class="o">::</span><span class="n">T0</span> <span class="p">{</span>
-        <span class="k">friend</span> <span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//8
-</span>    <span class="p">};</span>
-    <span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//9
-</span><span class="p">}</span>
-<span class="kt">void</span> <span class="n">test</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">Name1</span><span class="o">::</span><span class="n">T</span> <span class="n">t1</span><span class="p">;</span>
-    <span class="n">Name2</span><span class="o">::</span><span class="n">T</span> <span class="n">t2</span><span class="p">;</span>
-    <span class="c1">//9个函数全是候选函数  
-</span>    <span class="c1">//第1个函数是normal lookup找到的
-</span>    <span class="c1">//后8个函数全是argument-dependent lookup找到的
-</span>    <span class="n">func</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<p>从第一个类类型参数开始，依次遍历所有类类型参数。对于每一个参数，进入其类型定义所在的作用域（类内友元函数也包括在内），并依次进入其基类、间接基类……定义所在的作用域，查找同名函数，并加入候选函数。</p>
-
-<p><strong>注意：</strong>在继承体系中上升的过程中，不会因为找到同名函数就停止上升，这不同于常规查找。</p>
-
-<p>类中的运算符重载也遵循 ADL 查找，其候选函数集既包括成员函数，也应该包括非成员函数。</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="n">N</span>
-<span class="p">{</span>
-	<span class="k">class</span> <span class="nc">A</span>
-	<span class="p">{</span>
-	<span class="k">public</span><span class="o">:</span>
-		<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//1
-</span>	<span class="p">};</span>
-	<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//2
-</span><span class="p">};</span>
-<span class="kt">void</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">A</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//3
-</span>
-<span class="kt">void</span> <span class="n">test</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="n">N</span><span class="o">::</span><span class="n">A</span> <span class="n">a</span><span class="p">;</span>
-	<span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//1、2、3都是候选函数
-</span><span class="p">}</span>
-</code></pre>
-</div>
-
-<h3 id="确定可行函数">确定可行函数</h3>
-
-<p>第二步便是从候选函数中选出可行函数，选择的标准如下：</p>
 
 <ul>
-  <li>形参数量与本次调用提供的实参数量相等</li>
-  <li>每个实参的类型与对应的形参类型相同，或者能转换成形参类型</li>
+  <li>3、使用命令 <code class="highlighter-rouge">source ~/.bash_profile</code> 或者重启 终端 就 OK 了 。</li>
 </ul>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//以下为候选函数
-</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数
-</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数：实参可转化成形参类型
-</span><span class="kt">int</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//可行函数
-</span>
-<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">//非可行函数：形参数量不匹配
-</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">[])</span> <span class="p">{}</span> <span class="c1">//非可行函数：实参不能转换成形参
-</span>
-<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span>
-<span class="p">}</span>
+<p>现在你再在终端输入 <code class="highlighter-rouge">python</code> 就会发现，显示的信息为 2.7 了</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>
+Python 2.7.10 <span class="o">(</span>default, Oct 23 2015, 19:19:21<span class="o">)</span> 
+<span class="o">[</span>GCC 4.2.1 Compatible Apple LLVM 7.0.0 <span class="o">(</span>clang-700.0.59.5<span class="o">)]</span> on darwin
+Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span class="s2">"credits"</span> or <span class="s2">"license"</span> <span class="k">for </span>more information.
+
 </code></pre>
 </div>
 
-<h3 id="寻找最佳匹配">寻找最佳匹配</h3>
+<h3 id="生成sshkey过程">生成SSHKey过程</h3>
 
-<p>从可行函数中选择最匹配的函数，如果有多个形参，则最佳匹配条件为：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+1.查看是否已经有了ssh密钥：`cd ~/.ssh` ，如果没有密钥则不会有此文件夹，有则备份删除。    
+2.生存密钥：ssh-keygen -t rsa -C “test@gmail.com”。   按3个回车，密码为空。       
 
-<ul>
-  <li>该函数每个实参的匹配都不劣于其他可行函数需要的匹配。</li>
-  <li>至少有一个实参的匹配优于其他可行函数提供的匹配。</li>
-</ul>
+Your identification has been saved in /home/tekkub/.ssh/id_rsa.
+Your public key has been saved in /home/tekkub/.ssh/id_rsa.pub.
+The key fingerprint is:
+………………    
+最后得到了两个文件：id_rsa和id_rsa.pub  
 
-<p>否则，发生二义性调用错误。</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="c1">//可行函数
-</span><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
-<span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
-
-<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">);</span> <span class="c1">//二义性错误：double 向 int 的转换与向 float 的转换一样好
-</span>	<span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//调用 void func(int a, int b)
-</span><span class="p">}</span>
 </code></pre>
 </div>
 
-<p>为了确定最佳匹配，实参类型到形参类型的转换等级如下：</p>
+<h3 id="使用版本控制器-svn-versions-添加a库">使用版本控制器 SVN (versions) 添加.a库</h3>
 
-<ol>
-  <li>精确匹配：
-    <ul>
-      <li>实参类型和形参类型相同。</li>
-      <li>实参从数组类型或函数类型转换成对应的指针类型。</li>
-      <li>向实参添加顶层<code class="highlighter-rouge">const</code>或者从实参中删除顶层<code class="highlighter-rouge">const</code>。</li>
-    </ul>
-  </li>
-  <li>通过<code class="highlighter-rouge">const</code>转换实现的匹配。</li>
-  <li>通过类型提升实现的匹配。</li>
-  <li>通过算术类型转换或指针转换实现的匹配。</li>
-  <li>通过类类型转换实现的匹配。</li>
-</ol>
+<p>Xcode 自带的 svn 和 Versions 以及一些其它工具都不能上传”.a”文件</p>
 
-<p><em>一般不会存在这个阶段不会同时存在两个以上的精确匹配，因为两个精确的匹配在本质上是等价的，在定义重载函数时，编译器可能就报出重定义的错误了。</em></p>
+<p>下面是在 Mac 上如何把 .a 添加到 SVN 里面的</p>
 
-<p>挑几个重点的来详细说一下。</p>
+<p>1、打开终端，输入cd，空格，然后将需要上传的 .a 文件所在的文件夹（不是.a文件） 拖拽到终端（此办法无需输入繁琐的路径，快捷方便） 回车</p>
 
-<p><strong>指针转换实现的匹配</strong></p>
+<p>2、之后再输入如下命令：<code class="highlighter-rouge">svn add libGoogleAnalytics.a</code> ，回车</p>
 
-<ul>
-  <li>0 或<code class="highlighter-rouge">nullptr</code>能转换成任意指针类型。</li>
-  <li><code class="highlighter-rouge">T *</code> 能转换成 <code class="highlighter-rouge">void *</code>，<code class="highlighter-rouge">const void *</code>转换成<code class="highlighter-rouge">const void*</code>。</li>
-  <li>派生类向基类类型的转换。</li>
-  <li>函数与函数指针的形参类型必须精确匹配。</li>
-</ul>
+<p>之后会出现：A (bin) libGoogleAnalytics.a</p>
 
-<p><strong>类类型转换实现的匹配</strong></p>
+<p>表示添加成功，打开 Versions 就可以看到，刚才添加的 .a 文件，此时就可以手动上传了。</p>
 
-<p>两个类型提供相同的类型转换将产生二义性问题。</p>
+<p>另外，请注意路径的正确性。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">B</span><span class="p">;</span>
-<span class="k">struct</span> <span class="n">A</span>
-<span class="p">{</span>
-	<span class="n">A</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-	<span class="n">A</span><span class="p">(</span><span class="k">const</span> <span class="n">B</span><span class="o">&amp;</span><span class="p">);</span>	<span class="c1">//把一个 B 转换成 A
-</span><span class="p">};</span>
+<h2 id="转载自潘柏信的博客--点击阅读原文">转载自：<a href="http://baixin.io">潘柏信的博客</a> » <a href="http://baixin.io/2016/11/macTips/">点击阅读原文</a></h2>
 
-<span class="k">struct</span> <span class="n">B</span>
-<span class="p">{</span>
-	<span class="k">operator</span> <span class="n">A</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// 也是把一个 B 转换成 A
-</span><span class="p">};</span>
-
-<span class="n">A</span> <span class="n">f</span><span class="p">(</span><span class="k">const</span> <span class="n">A</span><span class="o">&amp;</span><span class="p">);</span>
-
-<span class="n">B</span> <span class="n">b</span><span class="p">;</span>
-<span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="c1">//二义性错误：f(B::operator A()) 还是 f(A::A(const B&amp;))
-</span>
-<span class="n">A</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="k">operator</span> <span class="n">A</span><span class="p">());</span> <span class="c1">//正确：使用 B 的类型转换运算
-</span><span class="n">A</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">b</span><span class="p">));</span> <span class="c1">//正确：使用 A 的构造函数
-</span></code></pre>
-</div>
-
-<p>类当中定义了多个参数都是算术类型的构造函数或类型转换运算符，也会产生二义性问题。</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="k">struct</span> <span class="n">A</span>
-<span class="p">{</span>
-	<span class="n">A</span><span class="p">(</span><span class="kt">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
-	<span class="n">A</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
-	<span class="k">operator</span> <span class="kt">int</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-	<span class="k">operator</span> <span class="kt">double</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="kt">void</span> <span class="n">f</span><span class="p">(</span><span class="kt">long</span> <span class="kt">double</span><span class="p">);</span>
-
-<span class="n">A</span> <span class="n">a</span><span class="p">;</span>
-<span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">//二义性错误：f(A::operator int()) 还是 f(A::operator double())？
-</span>
-<span class="kt">long</span> <span class="n">l</span><span class="p">;</span>
-<span class="n">A</span> <span class="n">a2</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="c1">//二义性错误：A::A(int) 还是 A::A(double)？
-</span>
-<span class="kt">short</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">A</span> <span class="n">a3</span><span class="p">(</span><span class="n">s</span><span class="p">);</span> <span class="c1">//正确：使用 A::A(int)
-</span></code></pre>
-</div>
-
-<p>当我们使用两个用户定义的类型转换时，如果转换函数之前或之后存在标准类型转换，则标准类型转换将决定最佳匹配到底是哪个。</p>
 
       
     </div>
@@ -733,7 +565,7 @@
         <div class="post-tags">
           
             
-            <a href="/tag/#/cpp" rel="tag"># cpp</a>
+            <a href="/tag/#/Mac" rel="tag"># Mac</a>
           
         </div>
       
@@ -749,8 +581,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/30/helloworld-compile-and-link/" rel="next" title="Hello World 的编译链接概述">
-                <i class="fa fa-chevron-left"></i> Hello World 的编译链接概述
+              <a href="/2017/08/10/POJ1113/" rel="next" title="POJ 1113 Wall(简单凸包)">
+                <i class="fa fa-chevron-left"></i> POJ 1113 Wall(简单凸包)
               </a>
             
           </div>
@@ -759,8 +591,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/21/function-matching-and-argument-deduction/" rel="prev" title="C++ 函数匹配及实参推断">
-                C++ 函数匹配及实参推断 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/08/GitTutorial/" rel="prev" title="Git教程">
+                Git教程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -946,7 +778,7 @@
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-2"> <a class="nav-link" href="#函数重载"> <span class="nav-number">1</span> <span class="nav-text">函数重载</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#函数匹配"> <span class="nav-number">2</span> <span class="nav-text">函数匹配</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#名字查找"> <span class="nav-number">2.1</span> <span class="nav-text">名字查找</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#确定可行函数"> <span class="nav-number">2.2</span> <span class="nav-text">确定可行函数</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#寻找最佳匹配"> <span class="nav-number">2.3</span> <span class="nav-text">寻找最佳匹配</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#转载自潘柏信的博客--点击阅读原文"> <span class="nav-number">1</span> <span class="nav-text">转载自：<a href="http://baixin.io"</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
     </ol>
   </div>
             

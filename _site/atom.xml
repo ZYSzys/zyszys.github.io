@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-12T18:40:21+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">POJ 1113 Wall(简单凸包)</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall(简单凸包)" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-12T19:00:02+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">POJ 1113 Wall(简单凸包)</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall(简单凸包)" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;简单的凸包模版题&lt;/p&gt;
 
@@ -147,7 +147,189 @@ Total Submissions: 37869        Accepted: 12907&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Hello World 的编译链接概述</title><link href="http://localhost:4000/2016/12/30/helloworld-compile-and-link/" rel="alternate" type="text/html" title="Hello World 的编译链接概述" /><published>2016-12-30T00:00:00+08:00</published><updated>2016-12-30T00:00:00+08:00</updated><id>http://localhost:4000/2016/12/30/helloworld-compile-and-link</id><content type="html" xml:base="http://localhost:4000/2016/12/30/helloworld-compile-and-link/">&lt;p&gt;《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。&lt;/p&gt;
+&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Mac知识整合</title><link href="http://localhost:4000/2017/08/08/macTips/" rel="alternate" type="text/html" title="Mac知识整合" /><published>2017-08-08T00:00:00+08:00</published><updated>2017-08-08T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/08/macTips</id><content type="html" xml:base="http://localhost:4000/2017/08/08/macTips/">&lt;h3 id=&quot;ds_store-文件是什么&quot;&gt;.DS_Store 文件是什么？&lt;/h3&gt;
+
+&lt;p&gt;.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;1，禁止.DS_store 生成：           &lt;br /&gt;
+打开 “终端” ，复制黏贴下面的命令，回车执行，重启Mac即可生效。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;2，恢复.DS_store生成：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;显示隐藏文件&quot;&gt;显示隐藏文件&lt;/h3&gt;
+
+&lt;p&gt;在终端执行命令，显示隐藏文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;defaults write com.apple.finder AppleShowAllFiles -bool true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;恢复隐藏&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;defaults write com.apple.finder AppleShowAllFiles -bool false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;执行命令后需要重新打开能看到效果。&lt;/p&gt;
+
+&lt;h3 id=&quot;切换-pyhton-环境&quot;&gt;切换 Pyhton 环境&lt;/h3&gt;
+
+&lt;p&gt;我本地之前 Python 环境是 2.7.10 ，然后学习 Tensorflow 的时候，安装了 Python 3.5.2 ，把系统默认 Pyton 环境也设置成了 3.5.2 版本，今天运行以前写的 python 脚本发现运行不了了，因为python 2.7 和 3.5 的 语法有挺多改动，现在我需要把系统的 python 环境回退到 2.7。&lt;/p&gt;
+
+&lt;p&gt;可以直接修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_profile&lt;/code&gt; 文件。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1、修改 &lt;code class=&quot;highlighter-rouge&quot;&gt;vim ~/.bash_profile&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;修改方式有很多种，使用 vim  ，或者 cd ~/ 然后 open . 打开文件夹，找到 .bash_profile 文件，双击打开。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;2、在&lt;code class=&quot;highlighter-rouge&quot;&gt;.bash_profile&lt;/code&gt; 文件里添加下面参数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alias python=&quot;/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;3、使用命令 &lt;code class=&quot;highlighter-rouge&quot;&gt;source ~/.bash_profile&lt;/code&gt; 或者重启 终端 就 OK 了 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;现在你再在终端输入 &lt;code class=&quot;highlighter-rouge&quot;&gt;python&lt;/code&gt; 就会发现，显示的信息为 2.7 了&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+Python 2.7.10 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;default, Oct 23 2015, 19:19:21&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;GCC 4.2.1 Compatible Apple LLVM 7.0.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;clang-700.0.59.5&lt;span class=&quot;o&quot;&gt;)]&lt;/span&gt; on darwin
+Type &lt;span class=&quot;s2&quot;&gt;&quot;help&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;copyright&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;credits&quot;&lt;/span&gt; or &lt;span class=&quot;s2&quot;&gt;&quot;license&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;more information.
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;生成sshkey过程&quot;&gt;生成SSHKey过程&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+1.查看是否已经有了ssh密钥：`cd ~/.ssh` ，如果没有密钥则不会有此文件夹，有则备份删除。    
+2.生存密钥：ssh-keygen -t rsa -C “test@gmail.com”。   按3个回车，密码为空。       
+
+Your identification has been saved in /home/tekkub/.ssh/id_rsa.
+Your public key has been saved in /home/tekkub/.ssh/id_rsa.pub.
+The key fingerprint is:
+………………    
+最后得到了两个文件：id_rsa和id_rsa.pub  
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;使用版本控制器-svn-versions-添加a库&quot;&gt;使用版本控制器 SVN (versions) 添加.a库&lt;/h3&gt;
+
+&lt;p&gt;Xcode 自带的 svn 和 Versions 以及一些其它工具都不能上传”.a”文件&lt;/p&gt;
+
+&lt;p&gt;下面是在 Mac 上如何把 .a 添加到 SVN 里面的&lt;/p&gt;
+
+&lt;p&gt;1、打开终端，输入cd，空格，然后将需要上传的 .a 文件所在的文件夹（不是.a文件） 拖拽到终端（此办法无需输入繁琐的路径，快捷方便） 回车&lt;/p&gt;
+
+&lt;p&gt;2、之后再输入如下命令：&lt;code class=&quot;highlighter-rouge&quot;&gt;svn add libGoogleAnalytics.a&lt;/code&gt; ，回车&lt;/p&gt;
+
+&lt;p&gt;之后会出现：A (bin) libGoogleAnalytics.a&lt;/p&gt;
+
+&lt;p&gt;表示添加成功，打开 Versions 就可以看到，刚才添加的 .a 文件，此时就可以手动上传了。&lt;/p&gt;
+
+&lt;p&gt;另外，请注意路径的正确性。&lt;/p&gt;
+
+&lt;h2 id=&quot;转载自潘柏信的博客--点击阅读原文&quot;&gt;转载自：&lt;a href=&quot;http://baixin.io&quot;&gt;潘柏信的博客&lt;/a&gt; » &lt;a href=&quot;http://baixin.io/2016/11/macTips/&quot;&gt;点击阅读原文&lt;/a&gt;&lt;/h2&gt;</content><author><name>ZYSzys</name></author><category term="Tools" /><category term="Mac" /><summary type="html">.DS_Store 文件是什么？ .DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。</summary></entry><entry><title type="html">Git教程</title><link href="http://localhost:4000/2017/08/08/GitTutorial/" rel="alternate" type="text/html" title="Git教程" /><published>2017-08-08T00:00:00+08:00</published><updated>2017-08-08T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/08/GitTutorial</id><content type="html" xml:base="http://localhost:4000/2017/08/08/GitTutorial/">&lt;h3 id=&quot;介绍&quot;&gt;介绍&lt;/h3&gt;
+
+&lt;p&gt;　　Git是做项目的版本管理，你也可以称它们为版本管理工具。假如现在你有一个文件夹，里面可以是项目，也可以是你的个人笔记(如我这个博客)，或者是你的简历、毕业设计等等，都可以使用git来管理。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;　　目前常用的版本控制器有Git和SVN，即使这两个你没有全用过，至少也会听过，我这里以Git为例，个人比较喜欢Git，你也可以看看这篇文章：&lt;a href=&quot;http://www.worldhello.net/2012/04/12/why-git-is-better-than-svn.html&quot;&gt;为什么Git比SVN好&lt;/a&gt;。我使用的是Mac，Mac上没自带Git环境，但是作为iOS开发者，我安装Xcode的时候，Xcode里是有自带Git的，所以我不需要考虑怎么去安装Git了。&lt;/p&gt;
+
+&lt;h3 id=&quot;安装git&quot;&gt;安装Git&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;在Mac OS X上安装Git&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;提供两种方法参考：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1、通过homebrew安装Git，具体方法请参考&lt;a href=&quot;http://brew.sh/&quot;&gt;homebrew的文档&lt;/a&gt;    &lt;br /&gt;
+2、直接从AppStore安装Xcode，Xcode集成了Git，不过默认没有安装，你需要运行Xcode。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;在Windows上安装Git&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;从&lt;a href=&quot;https://git-for-windows.github.io&quot;&gt;https://git-for-windows.github.io&lt;/a&gt; 下载，然后按默认选项安装即可，安装完成后，在开始菜单里找到“Git”-&amp;gt;“Git Bash”，蹦出一个类似命令行窗口的东西，就说明Git安装成功！&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;配置git&quot;&gt;配置Git&lt;/h3&gt;
+
+&lt;p&gt;安装完成后，还需要最后一步设置，在命令行输入：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;$ git config –global user.name “Your Name”&lt;/li&gt;
+    &lt;li&gt;$ git config –global user.email “email@example.com”&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;“Your Name”： 是每次提交时所显示的用户名，因为Git是分布式版本控制系统，当我们push到远端时，就需要区分每个提交记录具体是谁提交的，这个”Your Name”就是最好的区分。&lt;/p&gt;
+
+&lt;p&gt;“email@example.com”： 是你远端仓库的email&lt;/p&gt;
+
+&lt;p&gt;–global：用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然我们也可以对某个仓库指定不同的用户名和Email地址。&lt;/p&gt;
+
+&lt;h3 id=&quot;开始使用-建立仓库&quot;&gt;开始使用-建立仓库：&lt;/h3&gt;
+
+&lt;p&gt;你在目标文件夹下使命令：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;git init  （创建.git文件）&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;就会创建一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;.git&lt;/code&gt; 隐藏文件，相当于已经建立了一个本地仓库。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;添加到暂存区：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;git add .   （全部添加到暂存区）&lt;/li&gt;
+    &lt;li&gt;git commit -m ‘ first commit’  （提交暂存区的记录到本地仓库）&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;其它&quot;&gt;其它&lt;/h3&gt;
+
+&lt;p&gt;git branc 查看时如出现&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;(HEAD detached at analytics_v2)&lt;/li&gt;
+    &lt;li&gt;dev&lt;/li&gt;
+    &lt;li&gt;master&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;代表现在已经进入一个临时的HEAD，可以使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout -b temp&lt;/code&gt; 创建一个 temp branch，这样临时HEAD上修改的东西就不会被丢掉了。
+然后切换到 dev 分支上，在使用 git branch merge temp，就可以把 temp 分支上的代码合并到 dev 上了。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;转载自潘柏信的博客--点击阅读原文&quot;&gt;转载自：&lt;a href=&quot;http://baixin.io&quot;&gt;潘柏信的博客&lt;/a&gt; » &lt;a href=&quot;http://baixin.io/2016/07/GitTutorial/&quot;&gt;点击阅读原文&lt;/a&gt;&lt;/h2&gt;</content><author><name>ZYSzys</name></author><category term="Tools" /><category term="tool" /><summary type="html">介绍 　　Git是做项目的版本管理，你也可以称它们为版本管理工具。假如现在你有一个文件夹，里面可以是项目，也可以是你的个人笔记(如我这个博客)，或者是你的简历、毕业设计等等，都可以使用git来管理。</summary></entry><entry><title type="html">Hello World 的编译链接概述</title><link href="http://localhost:4000/2016/12/30/helloworld-compile-and-link/" rel="alternate" type="text/html" title="Hello World 的编译链接概述" /><published>2016-12-30T00:00:00+08:00</published><updated>2016-12-30T00:00:00+08:00</updated><id>http://localhost:4000/2016/12/30/helloworld-compile-and-link</id><content type="html" xml:base="http://localhost:4000/2016/12/30/helloworld-compile-and-link/">&lt;p&gt;《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -1213,110 +1395,4 @@ Hello World
   &lt;/ol&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;如你所见，没有一个是真的。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">看看以下这段代码： class Foo { public: int val; Foo *pnext; }; void foo_bar() { Foo bar; if (bar.val || bar.pnext ) // ... do somthing // ... } 上述程序并不会合成出一个 default constructor。什么时候会合成出 default constructor 呢，下面分4种情况。</summary></entry><entry><title type="html">C++ 之迭代器与算法</title><link href="http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm/" rel="alternate" type="text/html" title="C++ 之迭代器与算法" /><published>2016-09-21T00:00:00+08:00</published><updated>2016-09-21T00:00:00+08:00</updated><id>http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm</id><content type="html" xml:base="http://localhost:4000/2016/09/21/cpp-iterator-and-algorithm/">&lt;p&gt;C++ 有插入迭代器、流迭代器、反向迭代器、移动迭代器，泛型算法结构有适用的迭代器类别：输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器。&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;再探迭代器&quot;&gt;再探迭代器&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;迭代器&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;插入迭代器&lt;/li&gt;
-  &lt;li&gt;流迭代器&lt;/li&gt;
-  &lt;li&gt;反向迭代器&lt;/li&gt;
-  &lt;li&gt;移动迭代器&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;插入迭代器&quot;&gt;插入迭代器&lt;/h3&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//在it指定的当前位置插入值t。
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//不会做任何事情，都返回it
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;back_inserter&lt;/code&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;push_back&lt;/code&gt;的迭代器&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;front_inserter&lt;/code&gt;&lt;/strong&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;push_front&lt;/code&gt;的迭代器&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;inserter&lt;/code&gt;&lt;/strong&gt;: 第二个参数指向给定容器的迭代器&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;流迭代器&quot;&gt;流迭代器&lt;/h3&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;istream_iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//in从输入流is读取类型为T的值
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;istream_iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;//读取类型为T的值istream_iterator迭代器，表示尾后位置
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in2&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//in1和in2必须读取相同类型
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in2&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//返回从流中读取的值
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mem&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ostream_itertor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ostream_iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//不做任何事
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;可以为任何定义了输入运算符(»)的类型创建&lt;code class=&quot;highlighter-rouge&quot;&gt;istream_iterator&lt;/code&gt;对象，类似的(«)可以创建&lt;code class=&quot;highlighter-rouge&quot;&gt;ostream_iterator&lt;/code&gt;对象。&lt;/p&gt;
-
-&lt;h3 id=&quot;反向迭代器&quot;&gt;反向迭代器&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rbegin&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;rend&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;crbegin&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;crend&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;strong&gt;反向迭代器需要递减运算符&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;不可能从一个&lt;code class=&quot;highlighter-rouge&quot;&gt;forward_list&lt;/code&gt;或一个流迭代器创建反向迭代器。&lt;/p&gt;
-
-&lt;h2 id=&quot;泛型算法结构&quot;&gt;泛型算法结构&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;迭代器类别&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;输入迭代器&lt;/strong&gt;：&lt;code class=&quot;highlighter-rouge&quot;&gt;==&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;！=&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;++&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;-&amp;gt;&lt;/code&gt; 不保迭代器状态。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;输出迭代器&lt;/strong&gt;：&lt;code class=&quot;highlighter-rouge&quot;&gt;++&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; 只能赋值一次。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;前向迭代器&lt;/strong&gt;：输入和输出迭代器的操作，多次读写，多遍扫描。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;双向迭代器&lt;/strong&gt;：前置和后置递减运算符(&lt;code class=&quot;highlighter-rouge&quot;&gt;--&lt;/code&gt;)。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;随机访问迭代器&lt;/strong&gt;：常量时间访问序列，(&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;=&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;=&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;+=&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;-=&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;算法形参模式&quot;&gt;算法形参模式&lt;/h3&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;alg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;other&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;alg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;other&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;alg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beg2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;other&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;alg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beg2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;other&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;一些算法使用重载形式传递一个谓词&lt;/li&gt;
-  &lt;li&gt;_if版本算法&lt;/li&gt;
-  &lt;li&gt;区分拷贝元素的版本和不拷贝的版本&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;特定容器算法&quot;&gt;特定容器算法&lt;/h3&gt;
-
-&lt;p&gt;链表类型&lt;code class=&quot;highlighter-rouge&quot;&gt;list&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;forward_list&lt;/code&gt;定义了几个成员函数形式的算法：&lt;code class=&quot;highlighter-rouge&quot;&gt;sort&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;merge&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;remove&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;reverse&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;unique&lt;/code&gt;。&lt;/p&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lst2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lst2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove_if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;splice成员&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;splice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;splice_after&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><category term="c" /><summary type="html">C++ 有插入迭代器、流迭代器、反向迭代器、移动迭代器，泛型算法结构有适用的迭代器类别：输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器。</summary></entry></feed>
+&lt;p&gt;如你所见，没有一个是真的。&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">看看以下这段代码： class Foo { public: int val; Foo *pnext; }; void foo_bar() { Foo bar; if (bar.val || bar.pnext ) // ... do somthing // ... } 上述程序并不会合成出一个 default constructor。什么时候会合成出 default constructor 呢，下面分4种情况。</summary></entry></feed>
