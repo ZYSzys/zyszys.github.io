@@ -2,9 +2,121 @@
 <search>
   
     <entry>
-      <title><![CDATA[蔡勒公式]]></title>
-      <url>/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/</url>
-      <content type="html"><![CDATA[<h1 id="蔡勒公式c语言">蔡勒公式C语言</h1>
+      <title><![CDATA[HDU 1086 You can Solve a Geometry Problem too]]></title>
+      <url>/2017/08/13/HDU1086/</url>
+      <content type="html"><![CDATA[<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1086">HDU 1086 You can Solve a Geometry Problem too</a></p>
+
+<p>通过 快速排斥和跨立 判断线段相交</p>
+
+<!--more-->
+
+<h1 id="you-can-solve-a-geometry-problem-too">You can Solve a Geometry Problem too</h1>
+
+<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 11164    Accepted Submission(s): 5515</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>Many geometry（几何）problems were designed in the ACM/ICPC. And now, I also prepare a geometry problem for this final exam. According to the experience of many ACMers, geometry problems are always much trouble, but this problem is very easy, after all we are now attending an exam, not a contest :)
+Give you N (1&lt;=N&lt;=100) segments（线段）, please output the number of all intersections（交点）. You should count repeatedly if M (M&gt;2) segments intersect at the same point.</p>
+
+<p><strong>Note:You can assume that two segments would not intersect at more than one point.</strong></p>
+
+<h3 id="input">Input</h3>
+<p>Input contains multiple test cases. Each test case contains a integer N (1=N&lt;=100) in a line first, and then N lines follow. Each line describes one segment with four float values x1, y1, x2, y2 which are coordinates of the segment’s ending. 
+A test case starting with 0 terminates the input and this test case is not to be processed.</p>
+
+<h3 id="output">Output</h3>
+<p>For each case, print the number of intersections, and one line one case.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<p>2<br />
+0.00 0.00 1.00 1.00<br />
+0.00 1.00 1.00 0.00<br />
+3<br />
+0.00 0.00 1.00 1.00<br />
+0.00 1.00 1.00 0.000<br />
+0.00 0.00 1.00 0.00<br />
+0<br /></p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p>1<br />
+3<br /></p>
+
+<h2 id="题意">题意:</h2>
+<p>N条线段, 输入每条线段两端点的坐标, 求线段两两相交于一点的 点的数量(不同线段相交于同一点重复计算)</p>
+<h2 id="分析">分析:</h2>
+<p>根据快速排斥实验和跨立实验判断两线段是否相交。
+枚举每条线段, 将剩余线段依次于之进行比较判断, 套两层for循环即可得到答案</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">110</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">Point</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">Line</span>
+<span class="p">{</span>
+    <span class="n">Point</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span><span class="n">l</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">double</span> <span class="nf">Cross</span><span class="p">(</span><span class="n">Point</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span><span class="c1">//求出叉积
+</span><span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="nf">Judge</span><span class="p">(</span><span class="n">Line</span> <span class="n">u</span><span class="p">,</span> <span class="n">Line</span> <span class="n">v</span><span class="p">)</span><span class="c1">//判断线段是否相交
+</span><span class="p">{</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">max</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">))</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">))</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">min</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">))</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">min</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">))</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">Cross</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">Cross</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">Cross</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">Cross</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%lf%lf%lf%lf"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">Judge</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+                <span class="p">{</span>
+                    <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+]]></content>
+      <categories>
+        
+      </categories>
+      <tags>
+        
+          <tag> 数学 </tag>
+        
+          <tag> 计算几何 </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title><![CDATA[WeekdayTransation]]></title>
+      <url>/2017/08/12/WeekdayTransation/</url>
+      <content type="html"><![CDATA[<h1 id="基姆拉尔森计算公式c语言">基姆拉尔森计算公式C语言</h1>
 
 <div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="c1">//
 //  main.c
@@ -71,11 +183,11 @@
     </entry>
   
     <entry>
-      <title><![CDATA[今夕何夕]]></title>
+      <title><![CDATA[HDU 6112 今夕何夕]]></title>
       <url>/2017/08/12/HDU6112/</url>
       <content type="html"><![CDATA[<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=6112">HDU 6112 今夕何夕</a></p>
 
-<p>蔡勒公式, 根据年月日计算星期几</p>
+<p>根据年月日计算星期几(蔡勒公式或者基姆拉尔森计算公式)，这里用后者。</p>
 
 <!--more-->
 
@@ -198,7 +310,7 @@ Total Submission(s): 802    Accepted Submission(s): 269</p>
     </entry>
   
     <entry>
-      <title><![CDATA[POJ 1113 Wall(简单凸包)]]></title>
+      <title><![CDATA[POJ 1113 Wall]]></title>
       <url>/2017/08/10/POJ1113/</url>
       <content type="html"><![CDATA[<p><a href="http://poj.org/problem?id=1113">POJ 1113 Wall</a></p>
 
@@ -357,6 +469,8 @@ Total Submissions: 37869        Accepted: 12907</p>
         
       </categories>
       <tags>
+        
+          <tag> 数学 </tag>
         
           <tag> 计算几何 </tag>
         

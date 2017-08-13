@@ -1,4 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-12T21:22:51+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">蔡勒公式</title><link href="http://localhost:4000/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/" rel="alternate" type="text/html" title="蔡勒公式" /><published>2017-08-12T00:00:00+08:00</published><updated>2017-08-12T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F</id><content type="html" xml:base="http://localhost:4000/2017/08/12/%E8%94%A1%E5%8B%92%E5%85%AC%E5%BC%8F/">&lt;h1 id=&quot;蔡勒公式c语言&quot;&gt;蔡勒公式C语言&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-08-13T23:37:24+08:00</updated><id>http://localhost:4000/</id><title type="html">ZYSzys</title><subtitle>Just for fun.</subtitle><author><name>ZYSzys</name></author><entry><title type="html">HDU 1086 You can Solve a Geometry Problem too</title><link href="http://localhost:4000/2017/08/13/HDU1086/" rel="alternate" type="text/html" title="HDU 1086 You can Solve a Geometry Problem too" /><published>2017-08-13T00:00:00+08:00</published><updated>2017-08-13T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/13/HDU1086</id><content type="html" xml:base="http://localhost:4000/2017/08/13/HDU1086/">&lt;p&gt;&lt;a href=&quot;http://acm.hdu.edu.cn/showproblem.php?pid=1086&quot;&gt;HDU 1086 You can Solve a Geometry Problem too&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;通过 快速排斥和跨立 判断线段相交&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;you-can-solve-a-geometry-problem-too&quot;&gt;You can Solve a Geometry Problem too&lt;/h1&gt;
+
+&lt;p&gt;Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 11164    Accepted Submission(s): 5515&lt;/p&gt;
+
+&lt;h2 id=&quot;problem-description&quot;&gt;Problem Description&lt;/h2&gt;
+&lt;p&gt;Many geometry（几何）problems were designed in the ACM/ICPC. And now, I also prepare a geometry problem for this final exam. According to the experience of many ACMers, geometry problems are always much trouble, but this problem is very easy, after all we are now attending an exam, not a contest :)
+Give you N (1&amp;lt;=N&amp;lt;=100) segments（线段）, please output the number of all intersections（交点）. You should count repeatedly if M (M&amp;gt;2) segments intersect at the same point.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:You can assume that two segments would not intersect at more than one point.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;input&quot;&gt;Input&lt;/h3&gt;
+&lt;p&gt;Input contains multiple test cases. Each test case contains a integer N (1=N&amp;lt;=100) in a line first, and then N lines follow. Each line describes one segment with four float values x1, y1, x2, y2 which are coordinates of the segment’s ending. 
+A test case starting with 0 terminates the input and this test case is not to be processed.&lt;/p&gt;
+
+&lt;h3 id=&quot;output&quot;&gt;Output&lt;/h3&gt;
+&lt;p&gt;For each case, print the number of intersections, and one line one case.&lt;/p&gt;
+
+&lt;h3 id=&quot;sample-input&quot;&gt;Sample Input&lt;/h3&gt;
+&lt;p&gt;2&lt;br /&gt;
+0.00 0.00 1.00 1.00&lt;br /&gt;
+0.00 1.00 1.00 0.00&lt;br /&gt;
+3&lt;br /&gt;
+0.00 0.00 1.00 1.00&lt;br /&gt;
+0.00 1.00 1.00 0.000&lt;br /&gt;
+0.00 0.00 1.00 0.00&lt;br /&gt;
+0&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;sample-output&quot;&gt;Sample Output&lt;/h3&gt;
+&lt;p&gt;1&lt;br /&gt;
+3&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;题意&quot;&gt;题意:&lt;/h2&gt;
+&lt;p&gt;N条线段, 输入每条线段两端点的坐标, 求线段两两相交于一点的 点的数量(不同线段相交于同一点重复计算)&lt;/p&gt;
+&lt;h2 id=&quot;分析&quot;&gt;分析:&lt;/h2&gt;
+&lt;p&gt;根据快速排斥实验和跨立实验判断两线段是否相交。
+枚举每条线段, 将剩余线段依次于之进行比较判断, 套两层for循环即可得到答案&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;cstdio&amp;gt;
+#include &amp;lt;algorithm&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;N&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;110&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Point&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Line&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Point&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Cross&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Point&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Point&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Point&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//求出叉积
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Judge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Line&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Line&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//判断线段是否相交
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cross&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cross&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cross&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cross&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scanf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scanf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%lf%lf%lf%lf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Judge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="数学" /><category term="计算几何" /><summary type="html">HDU 1086 You can Solve a Geometry Problem too 通过 快速排斥和跨立 判断线段相交</summary></entry><entry><title type="html">WeekdayTransation</title><link href="http://localhost:4000/2017/08/12/WeekdayTransation/" rel="alternate" type="text/html" title="WeekdayTransation" /><published>2017-08-12T00:00:00+08:00</published><updated>2017-08-12T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/12/WeekdayTransation</id><content type="html" xml:base="http://localhost:4000/2017/08/12/WeekdayTransation/">&lt;h1 id=&quot;基姆拉尔森计算公式c语言&quot;&gt;基姆拉尔森计算公式C语言&lt;/h1&gt;
 
 &lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//
 //  main.c
@@ -49,9 +142,9 @@
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="Template" /><category term="数学" /><summary type="html">蔡勒公式C语言 // // main.c // 10.22.3(translate day to weekday) // // Created by ZYSzys on 16/10/22. // Copyright © 2016年 ZYSzys. All rights reserved. // #include &amp;lt;stdio.h&amp;gt; const char * getWeekdayByYearday(int iY, int iM, int iD) { int iWeekDay = -1; if (1 == iM || 2 == iM) { iM += 12; iY--; } iWeekDay = (iD + 1 + 2 * iM + 3 * (iM + 1) / 5 + iY + iY / 4 - iY / 100 + iY / 400) % 7; switch(iWeekDay) { case 0 : return &quot;Sunday&quot;; break; case 1 : return &quot;Monday&quot;; break; case 2 : return &quot;Tuesday&quot;; break; case 3 : return &quot;Wednesday&quot;; break; case 4 : return &quot;Thursday&quot;; break; case 5 : return &quot;Friday&quot;; break; case 6 : return &quot;Saturday&quot;; break; default : return NULL; break; } return NULL; } int main() { int year,month,day; char ch='1'; while(ch != '\033') { printf(&quot;\n请输入日期：\n格式为：1900,1,1\n&quot;); scanf(&quot;%d,%d,%d&quot;,&amp;amp;year,&amp;amp;month,&amp;amp;day); const char * p = getWeekdayByYearday(year, month, day); printf(&quot;WeekDay : %s\n&quot;, p); ch = getchar(); printf(&quot;\n&quot;); } }</summary></entry><entry><title type="html">今夕何夕</title><link href="http://localhost:4000/2017/08/12/HDU6112/" rel="alternate" type="text/html" title="今夕何夕" /><published>2017-08-12T00:00:00+08:00</published><updated>2017-08-12T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/12/HDU6112</id><content type="html" xml:base="http://localhost:4000/2017/08/12/HDU6112/">&lt;p&gt;&lt;a href=&quot;http://acm.hdu.edu.cn/showproblem.php?pid=6112&quot;&gt;HDU 6112 今夕何夕&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="Template" /><category term="数学" /><summary type="html">基姆拉尔森计算公式C语言 // // main.c // 10.22.3(translate day to weekday) // // Created by ZYSzys on 16/10/22. // Copyright © 2016年 ZYSzys. All rights reserved. // #include &amp;lt;stdio.h&amp;gt; const char * getWeekdayByYearday(int iY, int iM, int iD) { int iWeekDay = -1; if (1 == iM || 2 == iM) { iM += 12; iY--; } iWeekDay = (iD + 1 + 2 * iM + 3 * (iM + 1) / 5 + iY + iY / 4 - iY / 100 + iY / 400) % 7; switch(iWeekDay) { case 0 : return &quot;Sunday&quot;; break; case 1 : return &quot;Monday&quot;; break; case 2 : return &quot;Tuesday&quot;; break; case 3 : return &quot;Wednesday&quot;; break; case 4 : return &quot;Thursday&quot;; break; case 5 : return &quot;Friday&quot;; break; case 6 : return &quot;Saturday&quot;; break; default : return NULL; break; } return NULL; } int main() { int year,month,day; char ch='1'; while(ch != '\033') { printf(&quot;\n请输入日期：\n格式为：1900,1,1\n&quot;); scanf(&quot;%d,%d,%d&quot;,&amp;amp;year,&amp;amp;month,&amp;amp;day); const char * p = getWeekdayByYearday(year, month, day); printf(&quot;WeekDay : %s\n&quot;, p); ch = getchar(); printf(&quot;\n&quot;); } }</summary></entry><entry><title type="html">HDU 6112 今夕何夕</title><link href="http://localhost:4000/2017/08/12/HDU6112/" rel="alternate" type="text/html" title="HDU 6112 今夕何夕" /><published>2017-08-12T00:00:00+08:00</published><updated>2017-08-12T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/12/HDU6112</id><content type="html" xml:base="http://localhost:4000/2017/08/12/HDU6112/">&lt;p&gt;&lt;a href=&quot;http://acm.hdu.edu.cn/showproblem.php?pid=6112&quot;&gt;HDU 6112 今夕何夕&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;蔡勒公式, 根据年月日计算星期几&lt;/p&gt;
+&lt;p&gt;根据年月日计算星期几(蔡勒公式或者基姆拉尔森计算公式)，这里用后者。&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -158,7 +251,7 @@ Total Submission(s): 802    Accepted Submission(s): 269&lt;/p&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="数学" /><summary type="html">HDU 6112 今夕何夕 蔡勒公式, 根据年月日计算星期几</summary></entry><entry><title type="html">POJ 1113 Wall(简单凸包)</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall(简单凸包)" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="数学" /><summary type="html">HDU 6112 今夕何夕 根据年月日计算星期几(蔡勒公式或者基姆拉尔森计算公式)，这里用后者。</summary></entry><entry><title type="html">POJ 1113 Wall</title><link href="http://localhost:4000/2017/08/10/POJ1113/" rel="alternate" type="text/html" title="POJ 1113 Wall" /><published>2017-08-10T00:00:00+08:00</published><updated>2017-08-10T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/10/POJ1113</id><content type="html" xml:base="http://localhost:4000/2017/08/10/POJ1113/">&lt;p&gt;&lt;a href=&quot;http://poj.org/problem?id=1113&quot;&gt;POJ 1113 Wall&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;简单的凸包模版题&lt;/p&gt;
 
@@ -307,7 +400,7 @@ Total Submissions: 37869        Accepted: 12907&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Mac知识整合</title><link href="http://localhost:4000/2017/08/08/macTips/" rel="alternate" type="text/html" title="Mac知识整合" /><published>2017-08-08T00:00:00+08:00</published><updated>2017-08-08T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/08/macTips</id><content type="html" xml:base="http://localhost:4000/2017/08/08/macTips/">&lt;h3 id=&quot;ds_store-文件是什么&quot;&gt;.DS_Store 文件是什么？&lt;/h3&gt;
+&lt;p&gt;转载请注明：&lt;a href=&quot;https://zyszys.github.io&quot;&gt;ZYSzys的博客&lt;/a&gt; » &lt;a href=&quot;https://zyszys.github.io/2017/08/POJ1113/&quot;&gt;POJ 1113 Wall(简单凸包)&lt;/a&gt;&lt;/p&gt;</content><author><name>ZYSzys</name></author><category term="ACM" /><category term="数学" /><category term="计算几何" /><summary type="html">POJ 1113 Wall 简单的凸包模版题</summary></entry><entry><title type="html">Mac知识整合</title><link href="http://localhost:4000/2017/08/08/macTips/" rel="alternate" type="text/html" title="Mac知识整合" /><published>2017-08-08T00:00:00+08:00</published><updated>2017-08-08T00:00:00+08:00</updated><id>http://localhost:4000/2017/08/08/macTips</id><content type="html" xml:base="http://localhost:4000/2017/08/08/macTips/">&lt;h3 id=&quot;ds_store-文件是什么&quot;&gt;.DS_Store 文件是什么？&lt;/h3&gt;
 
 &lt;p&gt;.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。&lt;/p&gt;
 
@@ -1194,79 +1287,4 @@ Hello World
       &lt;td&gt; &lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">在类型转换和函数匹配中，字面值类型也是非常值得关注的。</summary></entry><entry><title type="html">C++ 类型转换</title><link href="http://localhost:4000/2016/11/13/cpp-type-conversion/" rel="alternate" type="text/html" title="C++ 类型转换" /><published>2016-11-13T00:00:00+08:00</published><updated>2016-11-13T00:00:00+08:00</updated><id>http://localhost:4000/2016/11/13/cpp-type-conversion</id><content type="html" xml:base="http://localhost:4000/2016/11/13/cpp-type-conversion/">&lt;p&gt;C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;隐式转换&quot;&gt;隐式转换&lt;/h2&gt;
-
-&lt;h3 id=&quot;何时发生隐式转换&quot;&gt;何时发生隐式转换&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;在大多数表达式中，比&lt;code class=&quot;highlighter-rouge&quot;&gt;int&lt;/code&gt;类型小的整型值首先提升为较大的整数类型（整型提升）。&lt;/li&gt;
-  &lt;li&gt;在条件中，非布尔值转换成布尔类型。&lt;/li&gt;
-  &lt;li&gt;初始化过程中，初始化值转换成变量类型；在赋值语句中，右侧运算对象转换成左侧运算对象的类型。&lt;/li&gt;
-  &lt;li&gt;如果算术运算或关系运算的运算有多种类型，需要转换成一种类型（算术转换）。&lt;/li&gt;
-  &lt;li&gt;函数调用时也会发生类型转换。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;转换规则&quot;&gt;转换规则&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;算术转换&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;运算符的对象转换成最宽的对象。当表达式中既有浮点型也有整型类型时，整型值也转换成浮点型。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;整型提升&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;小整数类型转换成较大的整数类型，对于&lt;code class=&quot;highlighter-rouge&quot;&gt;bool&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;char&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;signed char&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned char&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;short&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned short&lt;/code&gt;，只要它们所有可能的值都能存在&lt;code class=&quot;highlighter-rouge&quot;&gt;int&lt;/code&gt;里，它们就会提升成&lt;code class=&quot;highlighter-rouge&quot;&gt;int&lt;/code&gt;类型，否则提升成&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned int&lt;/code&gt;类型。&lt;/p&gt;
-
-&lt;p&gt;较大的&lt;code class=&quot;highlighter-rouge&quot;&gt;char&lt;/code&gt;类型（&lt;code class=&quot;highlighter-rouge&quot;&gt;wchar_t&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;char16_t&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;char32_t&lt;/code&gt;）提升成&lt;code class=&quot;highlighter-rouge&quot;&gt;int&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned int&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;long&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned long&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;long long&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;unsigned long long&lt;/code&gt;中最小的一种类型。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;无符号类型的运算对象&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;首先进行整型提升，提升后如果符号相同则小类型转换大类型。如果符号不同，而其中无符号类型不小于带符号类型，则都转成无符号的；如果带符号类型大于无符号类型，如果无符号类型的所有值都能存在带符号类型中，则无符号转成带符号，如果不能，那么带符号转换无符号。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;派生类到基类转换&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;派生类型向基类类型转换只对指针或引用有效。&lt;/li&gt;
-  &lt;li&gt;基类向派生类不存在隐式类型转换。&lt;/li&gt;
-  &lt;li&gt;转换可能访问受限：
-    &lt;ul&gt;
-      &lt;li&gt;只有公有继承时，用户代码才能使用该转换。&lt;/li&gt;
-      &lt;li&gt;任意方式继承，成员函数和友元都能使用该转换。&lt;/li&gt;
-      &lt;li&gt;D 公有继承或保存继承 B 时，则 D 的派生类的成员或友元才能使用 B 向 D 的转换。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;能够将一个派生类对象拷贝、移动或赋值给一个基类对象，不过只处理派生类对象的基类部分。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;隐式的类类型转换（转换构造函数）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;能通过一个实参调用的构造函数定义了一条从构造函数的类型向类类型的隐式转换规则，只允许一步类类型转换（内置类型转换除外）。&lt;/p&gt;
-
-&lt;p&gt;可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;explicit&lt;/code&gt;抑制构造函数定义的隐式转换。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;其它隐式类型转换&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;数组自动转换成指针。&lt;/li&gt;
-  &lt;li&gt;指针的转换：&lt;code class=&quot;highlighter-rouge&quot;&gt;nullptr&lt;/code&gt;能转换成任意指针类型；指向任意非常量的指针能转换成&lt;code class=&quot;highlighter-rouge&quot;&gt;void*&lt;/code&gt;；指向任意对象的指针能转换成&lt;code class=&quot;highlighter-rouge&quot;&gt;const void *&lt;/code&gt;；继承关系指针的转换。&lt;/li&gt;
-  &lt;li&gt;转换成布尔类型：如果指针或算术类型的值为0，转换结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;；否则转换结果是&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;。&lt;/li&gt;
-  &lt;li&gt;转换成常量：指向 T 的指针或引用分别转换成指向&lt;code class=&quot;highlighter-rouge&quot;&gt;const T&lt;/code&gt;的指针或引用（顶层&lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt;）。&lt;/li&gt;
-  &lt;li&gt;类类型定义的转换。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;显式转换&quot;&gt;显式转换&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;static_cast&lt;/code&gt;：只要不包含底层&lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt;，都可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;static_cast&lt;/code&gt;。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;const_cast&lt;/code&gt;：只能改变运算对象的底层&lt;code class=&quot;highlighter-rouge&quot;&gt;const&lt;/code&gt;，如果对象本身是一个常量，那么行为未定义。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;reinterpret_cast&lt;/code&gt;：为运算对象的位模式提供较底层次上的重新解释。&lt;/li&gt;
-  &lt;li&gt;旧式强制类型转换：
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  type (expr);
-  (type) expr;
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。</summary></entry></feed>
+&lt;/table&gt;</content><author><name>ZYSzys</name></author><category term="Program" /><category term="cpp" /><summary type="html">在类型转换和函数匹配中，字面值类型也是非常值得关注的。</summary></entry></feed>
