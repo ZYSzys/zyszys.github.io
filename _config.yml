@@ -3,6 +3,8 @@
 ## Docs: https://jekyllrb.com/docs/configuration/
 # ---------------------------------------------------------------
 
+source: app
+
 # Site
 title: ZYSzys
 subtitle: ZYSzys's Blog
