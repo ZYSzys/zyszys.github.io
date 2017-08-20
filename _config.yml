@@ -5,9 +5,9 @@
 
 # Site
 title: ZYSzys
-subtitle: Yitao's Blog
-description: Too simple, sometimes naive.
-author: Simpleyyt
+subtitle: ZYSzys's Blog
+description: Just for fun.
+author: ZYSzys
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
 language: zh-Hans
 date_format: '%Y-%m-%d'
@@ -56,7 +56,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      comments: true
+      comments: false
 
 # Atom feed
 feed:
@@ -64,13 +64,13 @@ feed:
 
 # Plugins
 ## Docs: https://help.github.com/articles/configuring-jekyll-plugins/
-gems:
+plugins:
 # jemoji conficts with toc in some no-ascii post
  - jemoji
  - jekyll-sitemap
  - jekyll-feed
 
-alipay: http://p1.bpimg.com/567571/9a4a158daee8aa69.png
+# alipay: http://p1.bpimg.com/567571/9a4a158daee8aa69.png
 
 # ---------------------------------------------------------------
 # Site Information Settings
@@ -88,7 +88,7 @@ keywords: "Jekyll, NexT, simpleyyt, yitao"
 rss:
 
 # Specify the date when the site was setup
-since: 2015
+since:
 
 # icon between year and author @Footer
 authoricon: heart
@@ -119,11 +119,11 @@ index_with_subtitle: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  #categories: /categories/
+  categories: /categories/
   #about: /about/
   archives: /archives/
   tags: /tags/
-  #sitemap: /sitemap.xml
+  #sitemap: /search.xml
   #commonweal: /404.html
 
 
@@ -215,8 +215,8 @@ font:
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
-  GitHub: https://github.com/simpleyyt
-  知乎: http://www.zhihu.com/people/yaoyit
+  GitHub: https://github.com/ZYSzys
+  知乎: http://www.zhihu.com/people/zhang-yong-sheng-82-92
 
 
 # Social Links Icons
@@ -385,9 +385,6 @@ disqus:
   enable: true
   shortname: simpleyyt
   count: true
-  # hide comments (visitors need to click to load the comments)
-  # count need to be false when hide is true
-  hide: false
 
 # Hypercomments
 #hypercomments_id:
@@ -498,7 +495,7 @@ leancloud_visitors:
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
 busuanzi_count:
   # count values only if the other configs are false
-  enable: false
+  enable: true
   # custom uv span for the whole site
   site_uv: true
   site_uv_header: <i class="fa fa-user"></i>
