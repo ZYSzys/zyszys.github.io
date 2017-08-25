@@ -1,7 +1,5 @@
 ---
 layout: post
-tags:
-  - 数学
 title: WeekdayTransation
 category: Template
 ---

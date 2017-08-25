@@ -1,7 +1,5 @@
 ---
 layout: post
-tags:
-  - 次短路
 title: 次短路
 category: Template
 ---
