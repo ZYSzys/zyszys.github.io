@@ -2,8 +2,8 @@
 title: 'C++ 类型转换'
 layout: post
 tags:
-  - cpp
-category: Program
+  - C++
+category: C++
 ---
 C++的类型转换比较杂，看了又忘，再看也忘。在此，总结了一下。
 

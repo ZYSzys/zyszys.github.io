@@ -2,8 +2,8 @@
 title: 'C++ 字面值常量'
 layout: post
 tags:
-  - cpp
-category: Program
+  - C++
+category: C++
 ---
 在类型转换和函数匹配中，字面值类型也是非常值得关注的。
 

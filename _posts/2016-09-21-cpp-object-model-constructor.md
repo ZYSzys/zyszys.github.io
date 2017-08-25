@@ -2,9 +2,9 @@
 published: true
 layout: post
 title: C++ 对象模型之构造函数
-category: Program
+category: C++
 tags: 
-  - cpp
+  - C++
 ---
 
 看看以下这段代码：

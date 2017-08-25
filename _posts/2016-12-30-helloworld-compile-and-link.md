@@ -1,10 +1,10 @@
 ---
 layout: post
 tags:
-  - cpp
-  - compiler
+  - C++
+  - Compiler
 title: 'Hello World 的编译链接概述'
-category: Program
+category: C++
 ---
 
 《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。
