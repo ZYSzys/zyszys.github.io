@@ -58,7 +58,6 @@ category: Tools
 >* git add .   （全部添加到暂存区）    
 >* git commit -m ' first commit'  （提交暂存区的记录到本地仓库）     
 
-
 ### 其它   
 
 git branc 查看时如出现
@@ -72,6 +71,6 @@ git branc 查看时如出现
 
 <br>
 
-## 转载自：[潘柏信的博客](http://baixin.io) » [点击阅读原文](http://baixin.io/2016/07/GitTutorial/)  
+
    
 
