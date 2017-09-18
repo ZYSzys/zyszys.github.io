@@ -4,7 +4,7 @@ category: Template
 title: KMP字符串匹配
 ---
 
-## kmp算法模板
+# kmp算法模板
 
 ## 代码：
 ```c++
@@ -64,4 +64,6 @@ int main()
 }
 ```
 
+## 参考：
+* [从头到尾彻底理解KMP](http://www.cnblogs.com/zhangtianq/p/5839909.html)
 
