@@ -4,10 +4,10 @@ title: 线段树
 category: Template
 ---
 
-## 线段树模板，包含单点查询、单点更新、区间查询、区间更新操作
+# 线段树模板，包含单点查询、单点更新、区间查询、区间更新操作
 
 
-代码：
+## 代码：
 ```c++
 #include <cstdio>
 #include <iostream>
@@ -170,3 +170,5 @@ int main()
 }
 ```
 
+## 参考：
+* [浅谈线段树](http://www.cnblogs.com/TheRoadToTheGold/p/6254255.html)
