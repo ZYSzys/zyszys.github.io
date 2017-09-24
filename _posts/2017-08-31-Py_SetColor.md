@@ -1,9 +1,9 @@
 ---
 layout: post
-title: python通过PIL为图片填充背景色
-category: Tools
+title: Python -- 通过PIL为图片填充背景色
+category: Python
 tags:
-  - python
+  - Python
   - tool
 ---
 
