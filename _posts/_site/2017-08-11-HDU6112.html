@@ -1,0 +1,110 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=6112">HDU 6112 今夕何夕</a></p>
+
+<p>根据年月日计算星期几(蔡勒公式或者基姆拉尔森计算公式)，这里用后者。</p>
+
+<!--more-->
+
+<h1 id="今夕何夕">今夕何夕</h1>
+
+<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K (Java/Others)
+Total Submission(s): 802    Accepted Submission(s): 269</p>
+
+<h2 id="problem-description">Problem Description</h2>
+
+<p>今天是2017年8月6日，农历闰六月十五。</p>
+
+<p>小度独自凭栏，望着一轮圆月，发出了“今夕何夕，见此良人”的寂寞感慨。</p>
+
+<p>为了排遣郁结，它决定思考一个数学问题：接下来最近的哪一年里的同一个日子，和今天的星期数一样？比如今天是8月6日，星期日。下一个也是星期日的8月6日发生在2023年。</p>
+
+<p>小贴士：在公历中，能被4整除但不能被100整除，或能被400整除的年份即为闰年。</p>
+
+<h3 id="input">Input</h3>
+
+<p>第一行为T，表示输入数据组数。</p>
+
+<p>每组数据包含一个日期，格式为YYYY-MM-DD。</p>
+
+<p>1 ≤ T ≤ 10000</p>
+
+<p>YYYY ≥ 2017</p>
+
+<p>日期一定是个合法的日期</p>
+
+<h3 id="output">Output</h3>
+
+<p>对每组数据输出答案年份，题目保证答案不会超过四位数。</p>
+
+<h3 id="sample-input">Sample Input</h3>
+
+<p>3
+2017-08-06
+2017-08-07
+2018-01-01</p>
+
+<h3 id="sample-output">Sample Output</h3>
+
+<p>2023
+2023
+2024</p>
+
+<h3 id="source">Source</h3>
+<p>2017”百度之星”程序设计大赛 - 初赛（A）</p>
+
+<h2 id="题意">题意：</h2>
+<p>给出一个年月日，求下一个同月同日同星期的年份</p>
+
+<h2 id="分析">分析：</h2>
+<p>蔡勒公式，根据蔡勒公式求出当前日期是星期几，从下一年开始逐年往后扫，满足条件跳出循环即可。
+<strong>坑点在如果给出的日期是闰年的2月29，需要特别注意一下~</strong></p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="kt">int</span> <span class="nf">Judge</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">y</span> <span class="o">%</span> <span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">y</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span><span class="c1">//判断是否为闰年
+</span>    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">getWeekdayByYearday</span><span class="p">(</span><span class="kt">int</span> <span class="n">iY</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iM</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iD</span><span class="p">)</span><span class="c1">//蔡勒公式直接求出星期几
+</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">iWeekDay</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">==</span> <span class="n">iM</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">iM</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">iM</span> <span class="o">+=</span> <span class="mi">12</span><span class="p">;</span>
+        <span class="n">iY</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">iWeekDay</span> <span class="o">=</span> <span class="p">(</span><span class="n">iD</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">iM</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">iM</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">iY</span> <span class="o">/</span> <span class="mi">400</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="c1">//0是星期日，1是星期一，依次往后推
+</span>    <span class="k">return</span> <span class="n">iWeekDay</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d-%d-%d"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">year</span><span class="p">,</span><span class="o">&amp;</span><span class="n">month</span><span class="p">,</span><span class="o">&amp;</span><span class="n">day</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">getWeekdayByYearday</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">year</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">Judge</span><span class="p">(</span><span class="n">year</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">29</span><span class="p">)</span><span class="c1">//特殊情况，跳过
+</span>            <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">pp</span> <span class="o">=</span> <span class="n">getWeekdayByYearday</span><span class="p">(</span><span class="n">year</span><span class="o">+</span><span class="n">i</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">pp</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">year</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>

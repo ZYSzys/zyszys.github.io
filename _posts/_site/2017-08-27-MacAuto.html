@@ -1,0 +1,58 @@
+<p><strong>Mac</strong>使用过程中经常需要处理一些不可见文件，一会显示，一会隐藏。为了系统文件的安全性，<strong>Mac</strong> 不像 <strong>Windows</strong> 那样，可以直接通过文件夹选项显示或者隐藏电脑中的不可见文件。</p>
+
+<!--more-->
+
+<h2 id="一般做法">一般做法:</h2>
+<p>1.在Terminal中输入下列代码来设置隐藏属性:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#设置隐藏文件不可见</span>
+defaults write com.apple.finder AppleShowAllFiles FALSE
+
+<span class="c">#设置隐藏文件可见</span>
+defaults write com.apple.finder AppleShowAllFiles TRUE
+</code></pre>
+</div>
+
+<p>2.重启Finder:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>killall Finder
+</code></pre>
+</div>
+
+<h2 id="使用automator自动化">使用Automator自动化:</h2>
+<p>1.在实用工具中打开 <strong>Automator</strong>，然后选择 <strong>服务(service)</strong>，在左侧 <strong>资源库</strong> 中选中 <strong>**运行Shell脚本</strong>，并将 <strong>输入</strong> 设置为没有输入。
+<img src="/assets/images/MacAuto.png" alt="Automator自动化界面" /></p>
+
+<p>2.在文本框中输入下列代码:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">current_value</span><span class="o">=</span><span class="k">$(</span>defaults <span class="nb">read </span>com.apple.finder AppleShowAllFiles<span class="k">)</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$current_value</span> <span class="o">=</span> <span class="s2">"TRUE"</span> <span class="o">]</span>
+
+<span class="k">then
+
+    </span>defaults write com.apple.finder AppleShowAllFiles FALSE
+
+<span class="k">else
+
+    </span>defaults write com.apple.finder AppleShowAllFiles TRUE
+
+<span class="k">fi
+
+    </span>killall Finder
+</code></pre>
+</div>
+
+<p>3.按下 <strong>command + s</strong> 保存并命名为 <strong>Toggle Hidden Files</strong>。现在打开 <strong>Finder</strong> 就可以在 <strong>服务</strong> 中使用刚才的脚本了。
+<img src="/assets/images/MacAuto1.png" alt="Finder 服务" /></p>
+
+<p>4.设置快捷键:在 <strong>Finder</strong> 的 <strong>服务</strong> 中打开 <strong>偏好设置</strong>，点击 <strong>快捷键</strong> 选项卡，找到 <strong>Toggle Hidden Files</strong>，然后设定一个你想要的快捷键，如我设置的 ⇧+⌘+’.’ 。
+<img src="/assets/images/MacAuto2.png" alt="快捷键设置" /></p>
+
+<h2 id="附">附：</h2>
+<p>将代码改为如下:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>killall NeteaseMusic
+open /Applications/NeteaseMusic.app
+</code></pre>
+</div>
+<p>将重启网易云音乐自动化(<strong>当断网重连无法播放未缓存音乐时快速重启</strong>)</p>
+

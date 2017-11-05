@@ -1,0 +1,200 @@
+<p>《程序员的自我修养》读书笔记，简单概述一个 Hello World 程序的编译链接过程。</p>
+
+<!--more-->
+
+<p>有如下的<code class="highlighter-rouge">hello.c</code>源文件：</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>可以用 GCC 来编译运行：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> hello.c
+<span class="nv">$.</span>/a.out
+Hello World
+</code></pre>
+</div>
+
+<p>上述步骤可以分解为 4 个步骤，分别是<strong>预处理（Prepressing）</strong>、<strong>编译（Compilation）</strong>、<strong>汇编（Assembly）</strong>和<strong>链接（Linking）</strong>。</p>
+
+<h2 id="被隐藏了的过程">被隐藏了的过程</h2>
+
+<h3 id="预处理">预处理</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -E hello.c -o hello.i
+</code></pre>
+</div>
+
+<p>或者：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$cpp</span> hello.c &gt; hello.i
+</code></pre>
+</div>
+
+<p>预编译过程主要处理那些源代码文件听以“#”开始的预编译指令。</p>
+
+<p>经过预编译后的 .i 文件不包含任何宏定义，因为所有的宏已经被展开，并且包含的文件也已经被插入到 .i 文件中。</p>
+
+<h3 id="编译">编译</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -S hello.i -o hello.S
+</code></pre>
+</div>
+
+<p>或者使用<code class="highlighter-rouge">cc1</code>：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$/</span>usr/lib/gcc/i486-linux-gnu/4.1/cc1 hello.c
+</code></pre>
+</div>
+
+<p>编译过程就是把预处理完的文件进行一系列<strong>词法分析</strong>、<strong>语法分析</strong>、<strong>语义分析</strong>及<strong>优化</strong>后产生的相应的汇编代码文件。</p>
+
+<p>实际上 gcc 这个命令只是这些后台程序的包装，它会根据不同的参数要求去调用预编译编译程序 cc1、汇编器 as、链接器 ld。</p>
+
+<h3 id="汇编">汇编</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$as</span> hello.s -o hello.c
+</code></pre>
+</div>
+<p>或者：</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$gcc</span> -c hello.s -o hello.o
+</code></pre>
+</div>
+
+<p>汇编器是将汇编代码转变成机器可以执行的指令，每一个汇编语句几乎都对应一条机器指令。</p>
+
+<h3 id="链接">链接</h3>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="nv">$ld</span> -static crt1.o crti.o crtbeginT.o hello.o -start-group -lgcc -lgcc_eh -lc -end-group crtend. crtn.o
+</code></pre>
+</div>
+
+<h2 id="编译器做了什么">编译器做了什么</h2>
+
+<p>编译过程一般可以分为6步：扫描、语法分析、语义分析、源代码优化、代码生成和目标代码优化。</p>
+
+<p>以如下代码为例：</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="词法分析">词法分析</h3>
+
+<p>源代码被输入到<strong>扫描器（Scanner）</strong>，进行词法分析，生成一系列的<strong>记号（Token）</strong>。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>记号</th>
+      <th>类型</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>[</td>
+      <td>左方括号</td>
+    </tr>
+    <tr>
+      <td>index</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>]</td>
+      <td>右方括号</td>
+    </tr>
+    <tr>
+      <td>=</td>
+      <td>赋值</td>
+    </tr>
+    <tr>
+      <td>(</td>
+      <td>左圆括号</td>
+    </tr>
+    <tr>
+      <td>index</td>
+      <td>标识符</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>加号</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>)</td>
+      <td>右圆括号</td>
+    </tr>
+    <tr>
+      <td>*</td>
+      <td>乘号</td>
+    </tr>
+    <tr>
+      <td>(</td>
+      <td>左圆括号</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>加号</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>数字</td>
+    </tr>
+    <tr>
+      <td>)</td>
+      <td>右圆括号</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>在识别记号的同时，扫描器也将标识符存放到符号表，将数字、字符串常量存放到文字表等。</p>
+
+<p>有一个叫 lex 的程序可以实现词法分析，它会按照用户之前描述好的词法规则将输入的字符串分割成一个个记号。</p>
+
+<h3 id="语法分析">语法分析</h3>
+
+<p><strong>语法分析器（Grammar Parser）</strong>将上述产生的记号进行语法分析，从而生成<strong>语法树（Syntax Tree）</strong>。</p>
+
+<p>有一个现有的工具叫 yacc（Yet Another Compiler Compiler）可以构建出语法树。</p>
+
+<h3 id="语义分析">语义分析</h3>
+
+<p><strong>语义分析器（Semantic Analyzer）</strong>完成了对表达式的语法层面的分析，即<strong>静态语义（Static Semantic）</strong>，包括声明和类型匹配，类型的转换。</p>
+
+<p>语义分析阶段后，语法树的表达式都被标识了类型，如有隐式转换，则插入相应的转换节点。</p>
+
+<h3 id="中间语言的生成">中间语言的生成</h3>
+
+<p><strong>源码优化器（Source Code Optimizer）</strong>将整个语法树转换成<strong>中间代码（Intermediate Code）</strong>，常见的有<strong>三地址码（Three-address Code）</strong>和<strong>P-代码（P-Code）</strong>，再进行源码级别的优化。</p>
+
+<p>中间代码使用编译器可以被分为前端和后端。编译器前端负责产生机器无关的中间代码，编译器后端将中间代码转换成目标机器代码。</p>
+
+<h3 id="目标代码生成与优化">目标代码生成与优化</h3>
+
+<p><strong>代码生成（Code Generator）</strong>将中间代码转换成目标机器代码，<strong>目标代码化化器（Target Code Optimizer）</strong>则对目标代码进行优化。</p>
+
+<h2 id="静态链接">静态链接</h2>
+
+<p><strong>链接（Linking）</strong>的主要内容就是把各个模块之间相互引用的部分都处理好。</p>
+
+<p>链接过程主要包括了<strong>地址和空间分配（Address and Storage Allocation）</strong>、<strong>符号决议（Symbol Resolution）</strong>和<strong>重定位（Relocation）</strong>这些步骤。</p>
+

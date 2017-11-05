@@ -1,0 +1,79 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1260">HDU 1260 Tickets</a></p>
+
+<p>简单DP，从前往后扫一遍就好了<br />
+状态转移方程：dp[i] = min(dp[i-1]+a[i], dp[i-2]+b[i])</p>
+
+<!--more-->
+<h1 id="tickets">Tickets</h1>
+
+<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 4953    Accepted Submission(s): 2587</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>Jesus, what a great movie! Thousands of people are rushing to the cinema. However, this is really a tuff time for Joe who sells the film tickets. He is wandering when could he go back home as early as possible.
+A good approach, reducing the total time of tickets selling, is let adjacent people buy tickets together. As the restriction of the Ticket Seller Machine, Joe can sell a single ticket or two adjacent tickets at a time.
+Since you are the great JESUS, you know exactly how much time needed for every person to buy a single ticket or two tickets for him/her. Could you so kind to tell poor Joe at what time could he go back home as early as possible? If so, I guess Joe would full of appreciation for your help.</p>
+
+<h3 id="input">Input</h3>
+<p>There are N(1&lt;=N&lt;=10) different scenarios, each scenario consists of 3 lines:
+1) An integer K(1&lt;=K&lt;=2000) representing the total number of people;
+2) K integer numbers(0s&lt;=Si&lt;=25s) representing the time consumed to buy a ticket for each person;
+3) (K-1) integer numbers(0s&lt;=Di&lt;=50s) representing the time needed for two adjacent people to buy two tickets together.</p>
+
+<h3 id="output">Output</h3>
+<p>For every scenario, please tell Joe at what time could he go back home as early as possible. Every day Joe started his work at 08:00:00 am. The format of time is HH:MM:SS am|pm.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<p>2<br />
+2<br />
+20 25<br />
+40<br />
+1<br />
+8</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p>08:00:40 am<br />
+08:00:08 am</p>
+
+<h2 id="代码">代码：</h2>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">2010</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">dp</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">b</span><span class="p">));</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="c1">//b[i]表示第i-1个人和第i个人一起买所花费的时间
+</span>        <span class="p">}</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="c1">//前两个人分开买或者一起买所花费的最少时间
+</span>        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">%</span><span class="mi">60</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">/</span><span class="mi">60</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">m</span><span class="o">/</span><span class="mi">60</span> <span class="o">+</span> <span class="mi">8</span><span class="p">;</span>
+        <span class="n">m</span> <span class="o">%=</span> <span class="mi">60</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%.2d:%.2d:%.2d %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">h</span><span class="o">%</span><span class="mi">12</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span> <span class="o">?</span> <span class="s">"pm"</span><span class="o">:</span><span class="s">"am"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+

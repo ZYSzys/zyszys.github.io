@@ -1,0 +1,69 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1203">HDU 1203 I NEED A OFFER!</a></p>
+
+<p>DP, 类似01背包问题</p>
+
+<!--more-->
+<h1 id="i-need-a-offer">I NEED A OFFER!</h1>
+
+<p>Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 29982    Accepted Submission(s): 12230</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>Speakless很早就想出国，现在他已经考完了所有需要的考试，准备了所有要准备的材料，于是，便需要去申请学校了。要申请国外的任何大学，你都要交纳一定的申请费用，这可是很惊人的。Speakless没有多少钱，总共只攒了n万美元。他将在m个学校中选择若干的（当然要在他的经济承受范围内）。每个学校都有不同的申请费用a（万美元），并且Speakless估计了他得到这个学校offer的可能性b。不同学校之间是否得到offer不会互相影响。“I NEED A OFFER”，他大叫一声。帮帮这个可怜的人吧，帮助他计算一下，他可以收到至少一份offer的最大概率。（如果Speakless选择了多个学校，得到任意一个学校的offer都可以）。</p>
+
+<h3 id="input">Input</h3>
+<p>输入有若干组数据，每组数据的第一行有两个正整数n,m(0&lt;=n&lt;=10000,0&lt;=m&lt;=10000) 
+后面的m行，每行都有两个数据ai(整型),bi(实型)分别表示第i个学校的申请费用和可能拿到offer的概率。 
+输入的最后有两个0。</p>
+
+<h3 id="output">Output</h3>
+<p>每组数据都对应一个输出，表示Speakless可能得到至少一份offer的最大概率。用百分数表示，精确到小数点后一位。</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<p>10 3</p>
+
+<p>4 0.1</p>
+
+<p>4 0.2</p>
+
+<p>5 0.3</p>
+
+<p>0 0</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p>44.0%</p>
+
+<h3 id="hint">Hint</h3>
+
+<p>You should use printf(“%%”) to print a ‘%’.</p>
+
+<h2 id="题解">题解：</h2>
+<p>求收到至少一份offer的最大概率，相当于求拿不到offer的最小概率<br />
+状态转移方程：dp[j] = min(dp[j], dp[j-a[i]] * (1-b[i]))—&gt;
+f[j] = max(f[j], (1-(1-f[j-a[i]]) * (1-b[i]))</p>
+
+<h2 id="代码">代码：</h2>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">10010</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">)</span><span class="o">!=</span><span class="n">EOF</span> <span class="o">&amp;&amp;</span> <span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">f</span><span class="p">[</span><span class="n">N</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+            <span class="kt">double</span> <span class="n">b</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%lf"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">&gt;=</span><span class="n">a</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">f</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="n">a</span><span class="p">]));</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%.1lf%%</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>

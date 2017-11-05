@@ -1,0 +1,125 @@
+<p><em>“如果一个 class 未定义出 copy constructor，编译器就自动为它产生出一个”</em> 这句话是不对的，当 class 展现 <strong>bitwise copy semanics</strong> 时，编译器才会产生出来。</p>
+
+<!--more-->
+
+<p>如果一个 class 没有提供 explicit copy constructor，把每一个内建的或派生的 data member 的值，从某个 object 拷贝一份到另一个 object 身上，递归方式施行 <strong>memberwise initialization</strong>。</p>
+
+<p>例如：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">String</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="c1">// ... 没有 explicit copy constructor
+</span>    <span class="nl">private:</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>有如下调用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">noun</span><span class="p">(</span><span class="s">"book"</span><span class="p">);</span>
+<span class="n">String</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">noun</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>则会施行 memberwise initialization：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">verb</span><span class="p">.</span><span class="n">str</span> <span class="o">=</span> <span class="n">noun</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="n">verb</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">noun</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+</code></pre>
+</div>
+<p>如果一个 String object 被声明为另一个 class 的 member，那么进行 memberwise initialization 时，会递归实施。</p>
+
+<p>什么时候不展现出 bitwise copy semantics，也就是合成 copy constructor 呢，有4种情况：</p>
+
+<blockquote>
+  <ol>
+    <li>当 member object 存在 copy constructor。</li>
+    <li>当 base class 存在 copy constructor。</li>
+    <li>当 class 声明了 virtual functions 时。</li>
+    <li>当继承链中有 virtual base class 时。</li>
+  </ol>
+</blockquote>
+
+<p>前面两种情况，在此不做讨论。</p>
+
+<h2 id="class-声明了-virtual-functions">class 声明了 virtual functions</h2>
+
+<p>这种情况下，可能需要重新设定 Virtual Table 的指针。</p>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">ZooAnimal</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">ZooAnimal</span><span class="p">();</span>
+    
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">animate</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">draw</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Bear</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Bear</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">animate</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">draw</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dance</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<p>有如下使用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Bear</span> <span class="n">yogi</span><span class="p">;</span>
+<span class="n">Bear</span> <span class="n">winnie</span> <span class="o">=</span> <span class="n">yogi</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">winnie</code>会靠 bitwise copy semantics 完成，<code class="highlighter-rouge">winnie</code>和<code class="highlighter-rouge">yogi</code>都指向<code class="highlighter-rouge">Bear class</code>的 virual table。</p>
+
+<p>如果是如下使用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ZooAnimal</span> <span class="n">franny</span> <span class="o">=</span> <span class="n">yogi</span><span class="p">;</span> <span class="c1">// 会发生切割行为
+</span></code></pre>
+</div>
+
+<p><code class="highlighter-rouge">franny</code>的 vptr 不可以被设定指向<code class="highlighter-rouge">Bear class</code>的 virtual table，所以需要重新设定。</p>
+
+<h2 id="virtual-base-class-的-subobject">Virtual Base Class 的 Subobject</h2>
+
+<p>derived class object 的 virtual base class subobject 位置必须维护，bitwise copy semantics 可能会存坏这个位置。</p>
+
+<p>举个例子：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Raccon</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">ZooAnimal</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Raccoon</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">Raccoon</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">RedPanda</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Raccoon</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">RedPanda</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">RedPanda</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<p>如果是以下调用：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">Raccoon</span> <span class="n">rocky</span><span class="p">;</span>
+<span class="n">Raccoon</span> <span class="n">little_critter</span> <span class="o">=</span> <span class="n">rocky</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>那么 bitwise copy 就可以了。</p>
+
+<p>如果是：</p>
+
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">RedPanda</span> <span class="n">little_red</span><span class="p">;</span>
+<span class="n">Raccoon</span> <span class="n">little_critter</span> <span class="o">=</span> <span class="n">litter_red</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>这时候编译器必须安插代码以设定 virtual base class offset 的初值。</p>

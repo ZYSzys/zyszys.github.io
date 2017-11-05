@@ -1,0 +1,85 @@
+<p>python中的多线程其实并不是真正的多线程，并不能做到充分利用多核CPU资源，都说python多线程是个鸡肋。想要充分利用，在python中大部分情况需要使用多进程，那么这个包就叫做 multiprocessing。
+<!--more--></p>
+<h1 id="multiprocessing">multiprocessing</h1>
+
+<h2 id="process">Process</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<span class="c">#-*- coding: utf-8 -*-</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">'ZYSzys'</span>
+
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Lock</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">MyProcess</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span><span class="c">#创建自己的进程类</span>
+    <span class="s">"""docstring for MyProcess"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">lock</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span><span class="c">#开启进程锁🔒，以免产生’互斥‘</span>
+            <span class="k">print</span> <span class="s">'Pid: '</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="s">' LoopCount: '</span><span class="p">,</span> <span class="n">count</span> <span class="p">,</span><span class="s">'</span><span class="se">\t</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span><span class="c">#释放进程锁🔒</span>
+        
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">'process: '</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="s">'</span><span class="se">\t</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">MyProcess</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">lock</span><span class="p">)</span>
+        <span class="c">#p.daemon = True #如果设置为True，当父进程结束后，子进程会自动被终止。</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="c">#p.join() #所有子进程都执行完了然后再结束</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">process</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">))</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">'CPU: '</span><span class="p">,</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span><span class="c">#CPU核数</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">active_children</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">'Child name: '</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">name</span>  <span class="o">+</span><span class="s">'id: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span><span class="c">#子进程</span>
+
+    <span class="k">print</span> <span class="s">'Process end'</span>
+</code></pre>
+</div>
+
+<h2 id="pool">Pool</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<span class="c">#-*- coding: utf-8 -*-</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">'ZYSzys'</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="kn">import</span> <span class="n">ConnectionError</span>
+
+<span class="k">def</span> <span class="nf">crawl</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ConnectionError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">'Error'</span><span class="p">,</span> <span class="n">url</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">'URL: '</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="s">'done'</span><span class="p">,</span> <span class="s">'</span><span class="se">\t</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="c">#设置四个进程</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'https://www.baidu.com'</span><span class="p">,</span>
+    <span class="s">'http://www.meituan.com/'</span><span class="p">,</span>
+    <span class="s">'http://blog.csdn.net/'</span><span class="p">,</span>
+    <span class="s">'http://xxxyxxx.net'</span>
+    <span class="p">]</span>
+    <span class="n">p</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">crawl</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span><span class="c">#将url映射进crawl函数</span>
+
+</code></pre>
+</div>
+<p><img src="/assets/images/Py1.png" alt="multiprocessing.Pool" /></p>
+<h2 id="参考">参考</h2>
+<p><a href="http://cuiqingcai.com/3335.html">Python爬虫进阶六之多进程的用法</a></p>

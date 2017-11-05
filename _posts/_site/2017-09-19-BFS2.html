@@ -1,0 +1,83 @@
+<p><a href="https://vjudge.net/contest/185807#problem/C">[kuangbin带你飞]专题一 简单搜索—Catch That Cow </a></p>
+
+<p>简单广搜。。。。
+<!--more--></p>
+<h1 id="catch-that-cow">Catch That Cow</h1>
+<h2 id="description">Description</h2>
+<p>Farmer John has been informed of the location of a fugitive cow and wants to catch her immediately. He starts at a point N (0 ≤ N ≤ 100,000) on a number line and the cow is at a point K (0 ≤ K ≤ 100,000) on the same number line. Farmer John has two modes of transportation: walking and teleporting.</p>
+
+<ul>
+  <li>Walking: FJ can move from any point X to the points X - 1 or X + 1 in a single minute</li>
+  <li>Teleporting: FJ can move from any point X to the point 2 × X in a single minute.</li>
+</ul>
+
+<p>If the cow, unaware of its pursuit, does not move at all, how long does it take for Farmer John to retrieve it?</p>
+
+<h3 id="input">Input</h3>
+<p>Line 1: Two space-separated integers: N and K</p>
+<h3 id="output">Output</h3>
+<p>Line 1: The least amount of time, in minutes, it takes for Farmer John to catch the fugitive cow.</p>
+<h3 id="sample-input">Sample Input</h3>
+<p>5 17</p>
+<h3 id="sample-output">Sample Output</h3>
+<p>4</p>
+<h3 id="hint">Hint</h3>
+<p>The fastest way for Farmer John to reach the fugitive cow is to move along the following path: 5-10-9-18-17, which takes 4 minutes.</p>
+
+<h2 id="代码">代码</h2>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;queue&gt;
+#include &lt;cstring&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100010</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">vis</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="k">struct</span> <span class="n">node</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span><span class="n">st</span><span class="p">,</span> <span class="n">ed</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">Next</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">BFS</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">&gt;</span><span class="n">q</span><span class="p">;</span>
+    <span class="n">st</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">st</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">st</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">node</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">node</span> <span class="n">nex</span><span class="p">;</span>
+            <span class="n">nex</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">Next</span><span class="p">(</span><span class="n">now</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">nex</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">now</span><span class="p">.</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">nex</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nex</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">N</span> <span class="o">||</span> <span class="n">vis</span><span class="p">[</span><span class="n">nex</span><span class="p">.</span><span class="n">x</span><span class="p">])</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">nex</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">nex</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">vis</span><span class="p">[</span><span class="n">nex</span><span class="p">.</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">nex</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">k</span><span class="p">);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">vis</span><span class="p">));</span>
+    <span class="n">vis</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">BFS</span><span class="p">();</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>

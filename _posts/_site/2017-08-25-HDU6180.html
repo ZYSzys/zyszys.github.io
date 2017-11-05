@@ -1,0 +1,95 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=6180">HDU 6180 Schedule</a></p>
+
+<p>贪心思想</p>
+
+<!--more-->
+
+<h1 id="schedule">Schedule</h1>
+
+<p>Time Limit: 4000/2000 MS (Java/Others)    Memory Limit: 153428/153428 K (Java/Others)
+Total Submission(s): 512    Accepted Submission(s): 191</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>There are N schedules, the i-th schedule has start time si and end time ei (1 &lt;= i &lt;= N). There are some machines. Each two overlapping schedules cannot be performed in the same machine. For each machine the working time is defined as the difference between timeend and timestart , where time_{end} is time to turn off the machine and timestart is time to turn on the machine. We assume that the machine cannot be turned off between the timestart and the timeend. 
+Print the minimum number K of the machines for performing all schedules, and when only uses K machines, print the minimum sum of all working times.</p>
+
+<h3 id="input">Input</h3>
+<p>The first line contains an integer T (1 &lt;= T &lt;= 100), the number of test cases. Each case begins with a line containing one integer N (0 &lt; N &lt;= 100000). Each of the next N lines contains two integers si and ei(0&lt;=si&lt; ei&lt;=1e9).</p>
+
+<h3 id="output">Output</h3>
+<p>For each test case, print the minimum possible number of machines and the minimum sum of all working times.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<p>1</p>
+
+<p>3</p>
+
+<p>1 3</p>
+
+<p>4 6</p>
+
+<p>2 5</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p>2 8</p>
+
+<h3 id="source">Source</h3>
+<p>2017 Multi-University Training Contest - Team 10</p>
+
+<h2 id="题解">题解:</h2>
+<p>按开始工作的时间从小到大排序后，用一个set容器维护一下，每次加入找set里面结束时间小于等于开始时间并且最近的点插入即可，然后如果没有小于开始时间的就重新开一台机器即可</p>
+
+<h2 id="代码">代码：</h2>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;set&gt;
+#include &lt;algorithm&gt;
+#define lint long long
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100010</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">node</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">;</span>
+<span class="p">}</span><span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">node</span> <span class="n">a</span><span class="p">,</span> <span class="n">node</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">s</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">multiset</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">st</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">st</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+        <span class="n">lint</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">upper_bound</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">s</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">st</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">e</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">s</span><span class="p">;</span>
+                <span class="n">st</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">e</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">it</span><span class="o">--</span><span class="p">;</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">e</span> <span class="o">-</span> <span class="o">*</span><span class="n">it</span><span class="p">;</span>
+                <span class="n">st</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+                <span class="n">st</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">e</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d %lld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">st</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>

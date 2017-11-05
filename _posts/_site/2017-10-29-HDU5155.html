@@ -1,0 +1,107 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=5115">HDU 5115 Dire Wolf</a></p>
+
+<p>区间DP。。。。。。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>设DP[i][j]表示杀死区间i~j之间的狼所需要花费的最小代价。
+该状态由上一个状态转移而来，所以只需要枚举最后一只被杀死的狼来更新dp值即可。
+状态转移方程: DP[i][j] =min( dp[i][k-1]+dp[k+1][j]+a[k]+b[i-1]+b[j+1])(k=[i..j])
+</code></pre>
+</div>
+
+<!--more-->
+<h1 id="dire-wolf">Dire Wolf</h1>
+
+<p>Time Limit: 5000/5000 MS (Java/Others)    Memory Limit: 512000/512000 K (Java/Others)
+Total Submission(s): 2862    Accepted Submission(s): 1704</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>Dire wolves, also known as Dark wolves, are extraordinarily large and powerful wolves. Many, if not all, Dire Wolves appear to originate from Draenor.
+Dire wolves look like normal wolves, but these creatures are of nearly twice the size. These powerful beasts, 8 - 9 feet long and weighing 600 - 800 pounds, are the most well-known orc mounts. As tall as a man, these great wolves have long tusked jaws that look like they could snap an iron bar. They have burning red eyes. Dire wolves are mottled gray or black in color. Dire wolves thrive in the northern regions of Kalimdor and in Mulgore.
+Dire wolves are efficient pack hunters that kill anything they catch. They prefer to attack in packs, surrounding and flanking a foe when they can.
+— Wowpedia, Your wiki guide to the World of Warcra</p>
+
+<p>Matt, an adventurer from the Eastern Kingdoms, meets a pack of dire wolves. There are N wolves standing in a row (numbered with 1 to N from left to right). Matt has to defeat all of them to survive.</p>
+
+<p>Once Matt defeats a dire wolf, he will take some damage which is equal to the wolf’s current attack. As gregarious beasts, each dire wolf i can increase its adjacent wolves’ attack by bi. Thus, each dire wolf i’s current attack consists of two parts, its basic attack ai and the extra attack provided by the current adjacent wolves. The increase of attack is temporary. Once a wolf is defeated, its adjacent wolves will no longer get extra attack from it. However, these two wolves (if exist) will become adjacent to each other now.</p>
+
+<p>For example, suppose there are 3 dire wolves standing in a row, whose basic attacks ai are (3, 5, 7), respectively. The extra attacks bi they can provide are (8, 2, 0). Thus, the current attacks of them are (5, 13, 9). If Matt defeats the second wolf first, he will get 13 points of damage and the alive wolves’ current attacks become (3, 15).</p>
+
+<p>As an alert and resourceful adventurer, Matt can decide the order of the dire wolves he defeats. Therefore, he wants to know the least damage he has to take to defeat all the wolves.</p>
+
+<h3 id="input">Input</h3>
+<p>The first line contains only one integer T , which indicates the number of test cases. For each test case, the first line contains only one integer N (2 ≤ N ≤ 200).</p>
+
+<p>The second line contains N integers ai (0 ≤ ai ≤ 100000), denoting the basic attack of each dire wolf.</p>
+
+<p>The third line contains N integers bi (0 ≤ bi ≤ 50000), denoting the extra attack each dire wolf can provide.</p>
+
+<h3 id="output">Output</h3>
+<p>For each test case, output a single line “Case #x: y”, where x is the case number (starting from 1), y is the least damage Matt needs to take.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>2
+3
+3 5 7
+8 2 0
+10
+1 3 5 7 9 2 4 6 8 10
+9 4 1 2 1 2 1 4 5 1
+</code></pre>
+</div>
+
+<h3 id="sample-output">Sample Output</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>Case #1: 17
+Case #2: 74
+</code></pre>
+</div>
+
+<h3 id="hint">Hint</h3>
+<p>In the ﬁrst sample, Matt defeats the dire wolves from left to right. He takes 5 + 5 + 7 = 17 points of damage which is the least damage he has to take.</p>
+
+<h2 id="代码">代码</h2>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">205</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">INF</span> <span class="o">=</span> <span class="mf">1e9</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//区间长度
+</span>        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">-</span><span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="c1">//区间的起点
+</span>            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">INF</span><span class="p">;</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">l</span><span class="o">++</span><span class="p">)</span><span class="c1">//从第j只狼杀到第k只狼的最少伤害  
+</span>                <span class="p">{</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dp</span><span class="p">[</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
+                <span class="p">}</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Case #%d: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">cnt</span><span class="o">++</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">m</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>

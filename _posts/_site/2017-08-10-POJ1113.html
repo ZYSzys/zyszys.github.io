@@ -1,0 +1,150 @@
+<p><a href="http://poj.org/problem?id=1113">POJ 1113 Wall</a></p>
+
+<p>简单的凸包模版题</p>
+
+<!--more-->
+
+<h1 id="wall">Wall</h1>
+
+<p>Time Limit: 1000MS      Memory Limit: 10000K
+Total Submissions: 37869        Accepted: 12907</p>
+
+<h2 id="description">Description</h2>
+
+<p>Once upon a time there was a greedy King who ordered his chief Architect to build a wall around the King’s castle. The King was so greedy, that he would not listen to his Architect’s proposals to build a beautiful brick wall with a perfect shape and nice tall towers. Instead, he ordered to build the wall around the whole castle using the least amount of stone and labor, but demanded that the wall should not come closer to the castle than a certain distance. If the King finds that the Architect has used more resources to build the wall than it was absolutely necessary to satisfy those requirements, then the Architect will loose his head. Moreover, he demanded Architect to introduce at once a plan of the wall listing the exact amount of resources that are needed to build the wall.</p>
+
+<p>Your task is to help poor Architect to save his head, by writing a program that will find the minimum possible length of the wall that he could build around the castle to satisfy King’s requirements.</p>
+
+<p>The task is somewhat simplified by the fact, that the King’s castle has a polygonal shape and is situated on a flat ground. The Architect has already established a Cartesian coordinate system and has precisely measured the coordinates of all castle’s vertices in feet.</p>
+
+<h3 id="input">Input</h3>
+
+<p>The first line of the input file contains two integer numbers N and L separated by a space. N (3 &lt;= N &lt;= 1000) is the number of vertices in the King’s castle, and L (1 &lt;= L &lt;= 1000) is the minimal number of feet that King allows for the wall to come close to the castle.</p>
+
+<p>Next N lines describe coordinates of castle’s vertices in a clockwise order. Each line contains two integer numbers Xi and Yi separated by a space (-10000 &lt;= Xi, Yi &lt;= 10000) that represent the coordinates of ith vertex. All vertices are different and the sides of the castle do not intersect anywhere except for vertices.</p>
+
+<h3 id="output">Output</h3>
+
+<p>Write to the output file the single number that represents the minimal possible length of the wall in feet that could be built around the castle to satisfy King’s requirements. You must present the integer number of feet to the King, because the floating numbers are not invented yet. However, you must round the result in such a way, that it is accurate to 8 inches (1 foot is equal to 12 inches), since the King will not tolerate larger error in the estimates.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+
+<p>9 100
+200 400
+300 400
+300 300
+400 300
+400 400
+500 400
+500 200
+350 200
+200 200</p>
+
+<h3 id="sample-output">Sample Output</h3>
+
+<p>1628</p>
+
+<h3 id="hint">Hint</h3>
+
+<p>结果四舍五入就可以了</p>
+
+<h3 id="source">Source</h3>
+
+<p>Northeastern Europe 2001</p>
+
+<h2 id="题意">题意:</h2>
+<p>输入凸包顶点数N和城墙与城堡之间距离L，接下来输入N个凸包顶点的坐标，求城墙周长</p>
+
+<h2 id="分析">分析:</h2>
+<p>简单的凸包模版题, 城墙周长＝凸包周长＋一个以L为半径的圆的周长</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">1010</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">double</span> <span class="n">Pi</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="k">struct</span> <span class="n">Point</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span><span class="n">poi</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">stack</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">top</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">Cross</span><span class="p">(</span><span class="n">Point</span> <span class="n">p0</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span><span class="c1">//求出向量 p0p1 和 p0p2的叉积
+</span><span class="p">{</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p0</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">dis</span><span class="p">(</span><span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span><span class="c1">//求p1, p2两点间距离
+</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">((</span><span class="kt">double</span><span class="p">)((</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Point</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Point</span> <span class="n">p2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">Cross</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="p">)))</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Init</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Point</span> <span class="n">p</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">||</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">poi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">poi</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Graham</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">stack</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">top</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">Cross</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">top</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">top</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">l</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">"%d%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">Init</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="n">Graham</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">top</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]);</span>
+        <span class="p">}</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="n">dis</span><span class="p">(</span><span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">poi</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="n">top</span><span class="p">]]);</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Pi</span> <span class="o">*</span> <span class="n">l</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">ans</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>转载请注明：<a href="https://zyszys.github.io">ZYSzys的博客</a> » <a href="https://zyszys.github.io/2017/08/POJ1113/">POJ 1113 Wall(简单凸包)</a></p>

@@ -1,0 +1,100 @@
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=1789">HDU 1789 Doing Homework again</a></p>
+
+<p>贪心思想，按照得分从大到小排序，然后从没门作业的截止日期往前扫，保证得分高的作业完成，扫到0都无法完成的那么就失分</p>
+
+<!--more-->
+<h1 id="doing-homework-again">Doing Homework again</h1>
+
+<p>Time Limit: 1000/1000 MS (Java/Others)    Memory Limit: 32768/32768 K (Java/Others)
+Total Submission(s): 14996    Accepted Submission(s): 8760</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<p>Ignatius has just come back school from the 30th ACM/ICPC. Now he has a lot of homework to do. Every teacher gives him a deadline of handing in the homework. If Ignatius hands in the homework after the deadline, the teacher will reduce his score of the final test. And now we assume that doing everyone homework always takes one day. So Ignatius wants you to help him to arrange the order of doing homework to minimize the reduced score.</p>
+
+<h3 id="input">Input</h3>
+<p>The input contains several test cases. The first line of the input is a single integer T that is the number of test cases. T test cases follow.
+Each test case start with a positive integer N(1&lt;=N&lt;=1000) which indicate the number of homework.. Then 2 lines follow. The first line contains N integers that indicate the deadlines of the subjects, and the next line contains N integers that indicate the reduced scores.</p>
+
+<h3 id="output">Output</h3>
+<p>For each test case, you should output the smallest total reduced score, one line per test case.</p>
+
+<h3 id="sample-input">Sample Input</h3>
+<p>3<br />
+3<br />
+3 3 3<br />
+10 5 1<br />
+3<br />
+1 3 1<br />
+6 2 3<br />
+7<br />
+1 4 6 4 2 4 3<br />
+3 2 1 7 6 5 4</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p>0<br />
+3<br />
+5</p>
+
+<h2 id="代码">代码：</h2>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">1010</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">Hw</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">time</span><span class="p">,</span> <span class="n">score</span><span class="p">;</span>
+<span class="p">}</span><span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">used</span><span class="p">[</span><span class="n">N</span><span class="p">];</span><span class="c1">//记录作业完成与否
+</span><span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Hw</span> <span class="n">x</span><span class="p">,</span> <span class="n">Hw</span> <span class="n">y</span><span class="p">)</span><span class="c1">//按分数从大到小排序
+</span><span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">score</span> <span class="o">==</span> <span class="n">y</span><span class="p">.</span><span class="n">score</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">.</span><span class="n">time</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">.</span><span class="n">score</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+	<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+	<span class="k">while</span><span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">maxt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+		<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">time</span><span class="p">);</span>
+			<span class="n">maxt</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxt</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">time</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">);</span>
+			<span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+		<span class="kt">int</span> <span class="n">lost</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="n">memset</span><span class="p">(</span><span class="n">used</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">used</span><span class="p">));</span>
+		<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">time</span><span class="p">;</span>
+			<span class="k">for</span><span class="p">(;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">used</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+				<span class="p">{</span>
+					<span class="n">used</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+					<span class="k">break</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="c1">//所有时间都安排给分数高的那门作业，则这门作业完不成了
+</span>			<span class="p">{</span>
+				<span class="n">lost</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">lost</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
