@@ -58,7 +58,7 @@ category: Tools
 >* git add .   （全部添加到暂存区）    
 >* git commit -m ' first commit'  （提交暂存区的记录到本地仓库）     
 
-### 其它   
+### 分支  
 
 git branc 查看时如出现
 
@@ -69,10 +69,19 @@ git branc 查看时如出现
 代表现在已经进入一个临时的HEAD，可以使用 `git checkout -b temp` 创建一个 temp branch，这样临时HEAD上修改的东西就不会被丢掉了。
 然后切换到 dev 分支上，在使用 git branch merge temp，就可以把 temp 分支上的代码合并到 dev 上了。
 
-* 查看历史提交  
+### 查看历史提交  
 ```bash
 git log --oneline --graph --decorate
 ```
+
+### 历史提交"续命"
+
+在之前修改了一个文件，但是没有commit，现在我想要commit，日期为那天的日期  
+```bash
+#git commit --date="月 日 时间 年 +0800" -am "提交"
+git commit --date="Dec 10 9:05:20 2017 +0800" -am "提交"
+```
+
 
 ### 参考
 [git Documentation](https://git-scm.com/book/zh/v2)
