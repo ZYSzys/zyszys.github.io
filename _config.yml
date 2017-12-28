@@ -123,6 +123,7 @@ menu:
   categories: /categories/
   tags: /tags/
   about: /about/
+  web: /web/
   #sitemap: /search.xml
   #commonweal: /404.html
 
@@ -143,6 +144,7 @@ menu_icons:
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
+  web: paper-plane
 
 
 
