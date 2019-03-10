@@ -96,7 +96,7 @@ git reset --hard <版本号>
 git push origin <分支名>
 ```
 会提示本地的版本落后于远端的版本  
-![rejected](/assets/images/rejected.png)
+![rejected](./rejected.png)
 
 为了覆盖掉远端的版本信息，使远端的仓库也回退到相应的版本，需要加上参数--force
 ```bash

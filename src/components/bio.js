@@ -40,8 +40,13 @@ function Bio() {
             <p>
               Written by <strong>{author}</strong> who lives and works in Hangzhou contributing to Node.js.
               {` `}
+              You should follow him on
               <a href={`https://github.com/${social.github}`}>
-                You should follow him on GitHub
+              {` `}GitHub{` `}
+              </a>
+              or
+              <a href={`https://github.com/${social.twitter}`}>
+              {` `}twitter.
               </a>
             </p>
           </div>
@@ -65,6 +70,7 @@ const bioQuery = graphql`
         author
         social {
           twitter
+          github
         }
       }
     }
